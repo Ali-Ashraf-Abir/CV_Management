@@ -1,7 +1,9 @@
 namespace backend.Services.Interfaces;
+
+using backend.Dtos;
 using backend.Models;
 
 public interface IJwtService
 {
-    string GenerateToken(User user);
+    JwtResultDto GenerateToken(User user);
 }

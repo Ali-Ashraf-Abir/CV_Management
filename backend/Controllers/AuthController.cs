@@ -15,20 +15,55 @@ public class AuthRoutes(IAuthService authService) : ControllerBase
     [HttpPost("register")]
     public async Task<IActionResult> RegisterUser(RegisterDto data)
     {
-        await authService.RegisterUser(data);
-        return Ok(new { message = "Registration successful." });
+        var user = await authService.RegisterUser(data);
+        return Ok(user);
     }
+
+    
     [HttpPost("login")]
     public async Task<IActionResult> Login(LoginDto dto)
     {
-        var token = await authService.LoginUser(dto);
-
-        return Ok(new
-        {
-            accessToken = token
-        });
+        var result = await authService.LoginUser(dto);
+        Response.Cookies.Append("refreshToken", result.RefreshToken,
+               new CookieOptions
+               {
+                   HttpOnly = true,
+                   Secure = true,          // true in production (HTTPS)
+                   SameSite = SameSiteMode.Strict,
+                   Expires = DateTimeOffset.UtcNow.AddDays(30)
+               });
+        result.RefreshToken = string.Empty;
+        return Ok(result);
     }
 
+
+    [HttpPost("refresh")]
+    public async Task<IActionResult> Refresh()
+    {
+        var refreshToken = Request.Cookies["refreshToken"];
+
+        if (string.IsNullOrEmpty(refreshToken))
+            return Unauthorized();
+
+        var result = await authService.RefreshTokenAsync(
+            new RefreshTokenDto
+            {
+                RefreshToken = refreshToken
+            });
+
+        Response.Cookies.Append("refreshToken", result.RefreshToken,
+            new CookieOptions
+            {
+                HttpOnly = true,
+                Secure = true,
+                SameSite = SameSiteMode.Strict,
+                Expires = DateTimeOffset.UtcNow.AddDays(30)
+            });
+
+        result.RefreshToken = string.Empty;
+
+        return Ok(result);
+    }
 
 
 }
