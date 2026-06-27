@@ -10,25 +10,28 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Npgsql;
 
-public class AuthService(ApplicationDbContext _db, IPasswordHasher<User> passwordHasher) : IAuthService
+public class AuthService(ApplicationDbContext _db, IPasswordHasher<User> passwordHasher, IJwtService _jwtService) : IAuthService
 {
-     public async  Task RegisterUser(RegisterDto data)
+    public async Task RegisterUser(RegisterDto dto)
     {
-        if (data.Role != Roles.Candidate && data.Role != Roles.Recruiter)
+        if (dto.Role != Roles.Candidate && dto.Role != Roles.Recruiter)
         {
             throw new BadHttpRequestException("Invalid role.");
         }
+
         var user = new User
         {
             Id = Guid.NewGuid(),
-            FirstName = data.FirstName,
-            LastName = data.LastName,
-            Email = data.Email,
-            Role = data.Role,
+            FirstName = dto.FirstName,
+            LastName = dto.LastName,
+            Email = dto.Email,
+            Role = dto.Role,
             CreatedAt = DateTime.UtcNow,
             UpdatedAt = DateTime.UtcNow
         };
-        user.PasswordHash = passwordHasher.HashPassword(user, data.Password);
+
+        user.PasswordHash = passwordHasher.HashPassword(user, dto.Password);
+
         try
         {
             _db.Users.Add(user);
@@ -42,5 +45,22 @@ public class AuthService(ApplicationDbContext _db, IPasswordHasher<User> passwor
             }
             throw;
         }
+    }
+
+    public async Task<string> LoginUser(LoginDto dto)
+    {
+        var user = await _db.Users.FirstOrDefaultAsync(u => u.Email == dto.Email);
+        if (user == null)
+        {
+            throw new NotFoundException("User Not Found");
+        }
+        var result = passwordHasher.VerifyHashedPassword(user, user.PasswordHash, dto.Password);
+
+        if (result == PasswordVerificationResult.Failed)
+        {
+            throw new UnauthorizedException("Invalid email or password.");
+        }
+        var token = _jwtService.GenerateToken(user);
+        return token;
     }
 }
