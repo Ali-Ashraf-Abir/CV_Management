@@ -11,7 +11,7 @@ public static class ClaimsPrincipalExtensions
         var value = user.FindFirstValue(ClaimTypes.NameIdentifier);
 
         if (value is null)
-            throw new UnauthorizedAccessException();
+            throw new UnauthorizedAccessException("User is not authenticated.");
 
         return Guid.Parse(value);
     }

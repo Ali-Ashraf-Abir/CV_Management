@@ -14,6 +14,7 @@ import { FormField } from "@/components/ui/form-field";
 import { loginUser } from "@/lib/auth";
 import { cn } from "@/lib/utils";
 import { useLoginSchema } from "@/validations/login.schema";
+import { useAuth } from "@/hooks/useAuth";
 
 
 type LoginFormValues = {
@@ -28,7 +29,7 @@ export function LoginForm() {
   const schema = useLoginSchema();
   const [showPass, setShowPass] = useState(false);
   const [serverError, setServerError] = useState<string | null>(null);
-
+  const {login} = useAuth();
   const {
     register,
     handleSubmit,
@@ -41,8 +42,8 @@ export function LoginForm() {
   async function onSubmit(data: LoginFormValues) {
     setServerError(null);
     try {
-      await loginUser(data);
-      router.push(`/${locale}/dashboard`);
+      await login(data);
+      router.push(`/${locale}/jobs`);
     } catch (err: unknown) {
       const message =
         (err as { response?: { data?: { message?: string } } })?.response?.data?.message ??

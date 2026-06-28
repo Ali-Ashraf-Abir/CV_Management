@@ -1,9 +1,13 @@
 let accessToken: string | null = null;
 
 export function getAccessToken() {
-    return accessToken;
+  return accessToken;
 }
 
 export function setAccessToken(token: string | null) {
-    accessToken = token;
+  accessToken = token;
+}
+
+export function clearAccessToken() {
+  accessToken = null;
 }

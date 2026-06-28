@@ -8,12 +8,13 @@ import { ThemeToggle } from "./theme-toggle";
 import { LanguageSwitcher } from "./language-switcher";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
+import { useAuth } from "@/hooks/useAuth";
 
 export function Navbar() {
   const [open, setOpen] = useState(false);
   const t = useTranslations("nav");
   const locale = useLocale();
-
+  const {user,isAuthenticated}=useAuth();
   const base = `/${locale}`;
 
   return (
@@ -36,12 +37,12 @@ export function Navbar() {
             <ThemeToggle />
             <LanguageSwitcher />
             <div className="mx-2 h-5 w-px bg-border" />
-            <Button variant="ghost" size="sm" asChild>
+            {isAuthenticated?<span>{user?.firstName}</span>:<div><Button variant="ghost" size="sm" asChild>
               <Link href={`${base}/login`}>{t("login")}</Link>
             </Button>
             <Button size="sm" asChild>
               <Link href={`${base}/register`}>{t("register")}</Link>
-            </Button>
+            </Button></div>}
           </nav>
 
           {/* Mobile: toggles + hamburger */}
