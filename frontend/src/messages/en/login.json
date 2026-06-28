@@ -1,0 +1,18 @@
+{
+  "title": "Welcome back",
+  "subtitle": "Sign in to continue to your account",
+  "email": "Email address",
+  "emailPlaceholder": "you@example.com",
+  "password": "Password",
+  "passwordPlaceholder": "Enter your password",
+  "submit": "Sign in",
+  "submitting": "Signing in…",
+  "noAccount": "Don't have an account?",
+  "registerLink": "Create one",
+  "errors": {
+    "emailRequired": "Email is required",
+    "emailInvalid": "Enter a valid email address",
+    "passwordRequired": "Password is required",
+    "passwordMin": "Password must be at least 8 characters"
+  }
+}
