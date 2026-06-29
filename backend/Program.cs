@@ -40,6 +40,7 @@ builder.Services.Configure<JwtOptions>(builder.Configuration.GetSection("Jwt"));
 builder.Services.AddScoped<IJwtService, JwtService>();
 builder.Services.AddScoped<IRefreshTokenService,RefreshTokenService>();
 builder.Services.AddScoped<IUserService,UserService>();
+builder.Services.AddScoped<IAttributeService,AttributeService>();
 // jwt setting
 builder.Services.AddJwtAuthentication(builder.Configuration);
 
