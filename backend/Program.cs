@@ -41,6 +41,7 @@ builder.Services.AddScoped<IJwtService, JwtService>();
 builder.Services.AddScoped<IRefreshTokenService,RefreshTokenService>();
 builder.Services.AddScoped<IUserService,UserService>();
 builder.Services.AddScoped<IAttributeService,AttributeService>();
+builder.Services.AddScoped<IAttributeValueService,AttributeValueService>();
 // jwt setting
 builder.Services.AddJwtAuthentication(builder.Configuration);
 
