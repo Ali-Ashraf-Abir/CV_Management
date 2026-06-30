@@ -1,5 +1,13 @@
 {
   "login": "Sign in",
   "register": "Get started",
-  "home": "Home"
+  "home": "Home",
+  "dashboard": "Dashboard",
+  "jobs": "Jobs",
+  "appliedJobs": "Applied Jobs",
+  "cv": "CV",
+  "profile": "Profile",
+  "positions": "Positions",
+  "myPositions": "My Positions",
+  "attributes": "Attributes"
 }

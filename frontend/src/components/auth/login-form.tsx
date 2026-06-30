@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { useLocale, useTranslations } from "next-intl";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -29,7 +29,9 @@ export function LoginForm() {
   const schema = useLoginSchema();
   const [showPass, setShowPass] = useState(false);
   const [serverError, setServerError] = useState<string | null>(null);
-  const {login} = useAuth();
+  const { login, user,isLoading } = useAuth();
+
+  const searchParams = useSearchParams();
   const {
     register,
     handleSubmit,
@@ -41,17 +43,27 @@ export function LoginForm() {
 
   async function onSubmit(data: LoginFormValues) {
     setServerError(null);
+
     try {
       await login(data);
-      router.push(`/${locale}/jobs`);
+
+      const redirect = searchParams.get("redirect");
+
+      router.push(redirect ?? `/${locale}/jobs`);
     } catch (err: unknown) {
       const message =
         (err as { response?: { data?: { message?: string } } })?.response?.data?.message ??
         "Something went wrong. Please try again.";
+
       setServerError(message);
     }
   }
-
+  if(isLoading){
+    return <></>
+  }
+  if (user) {
+    router.push(`/${locale}/jobs`)
+  }
   return (
     <form onSubmit={handleSubmit(onSubmit)} noValidate className="flex flex-col gap-5">
       {serverError && (

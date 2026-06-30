@@ -4,7 +4,6 @@ import { Briefcase } from "lucide-react";
 
 export default async function LoginPage() {
   const t = await getTranslations("login");
-
   return (
     <div className="flex min-h-[calc(100vh-4rem)] items-center justify-center px-4 py-12">
       <div className="w-full max-w-md">

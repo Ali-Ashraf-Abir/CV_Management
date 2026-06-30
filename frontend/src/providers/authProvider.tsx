@@ -19,13 +19,13 @@ import { clearAccessToken } from "@/lib/token";
 
 
 interface AuthContextValue {
-  user: User | null;
-  isAuthenticated: boolean;
-  isLoading: boolean;
+    user: User | null;
+    isAuthenticated: boolean;
+    isLoading: boolean;
 
-  login(credentials: LoginPayload): Promise<void>;
-  logout(): Promise<void>;
-  refreshUser(): Promise<void>;
+    login(credentials: LoginPayload): Promise<void>;
+    logout(): Promise<void>;
+    refreshUser(): Promise<void>;
 }
 
 export const AuthContext =
@@ -70,12 +70,10 @@ export function AuthProvider({
     };
 
     const logout = async () => {
-        try {
-            await logoutUser();
-        } finally {
-            clearAccessToken();
-            setUser(null);
-        }
+
+        clearAccessToken();
+        setUser(null);
+
     };
 
     const refreshUser = async () => {

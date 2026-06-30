@@ -1,5 +1,13 @@
 {
   "login": "Anmelden",
   "register": "Loslegen",
-  "home": "Startseite"
+  "home": "Startseite",
+  "dashboard": "Dashboard",
+  "jobs": "Jobs",
+  "appliedJobs": "Beworbene Jobs",
+  "cv": "Lebenslauf",
+  "profile": "Profil",
+  "positions": "Stellen",
+  "myPositions": "Meine Stellen",
+  "attributes": "Attribute"
 }

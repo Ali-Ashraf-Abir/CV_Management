@@ -49,7 +49,6 @@ const TYPE_META: Record<AttributeType, { icon: LucideIcon; className: string }> 
   },
 };
 
-// Icon + color only — no copy, so this stays safe to call from server components too.
 export function getAttributeTypeMeta(type: AttributeType) {
   return TYPE_META[type];
 }

@@ -10,12 +10,53 @@ import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { useAuth } from "@/hooks/useAuth";
 
+type NavLink = { href: string; label: string };
+
+function getRoleLinks(role: string | undefined, base: string, t: any): NavLink[] {
+  const candidateLinks: NavLink[] = [
+    { href: `${base}/dashboard`, label: t("dashboard") },
+    { href: `${base}/jobs`, label: t("jobs") },
+    { href: `${base}/applied-jobs`, label: t("appliedJobs") },
+    { href: `${base}/cv`, label: t("cv") },
+    { href: `${base}/profile`, label: t("profile") },
+  ];
+
+  const recruiterLinks: NavLink[] = [
+    { href: `${base}/dashboard`, label: t("dashboard") },
+    { href: `${base}/positions`, label: t("positions") },
+    { href: `${base}/my-positions`, label: t("myPositions") },
+    { href: `${base}/attributes`, label: t("attributes") },
+    { href: `${base}/profile`, label: t("profile") },
+  ];
+
+  const adminLinks: NavLink[] = Array.from(
+    new Map([...candidateLinks, ...recruiterLinks].map((l) => [l.href, l])).values()
+  );
+
+  switch (role) {
+    case "Candidate":
+      return candidateLinks;
+    case "Recruiter":
+      return recruiterLinks;
+    case "Administrator":
+      return adminLinks;
+    default:
+      return [];
+  }
+}
+
 export function Navbar() {
   const [open, setOpen] = useState(false);
   const t = useTranslations("nav");
   const locale = useLocale();
-  const {user,isAuthenticated}=useAuth();
+  const { user, isAuthenticated, isLoading, logout } = useAuth();
   const base = `/${locale}`;
+
+  if (isLoading) {
+    return <></>;
+  }
+
+  const roleLinks = isAuthenticated ? getRoleLinks(user?.role, base, t) : [];
 
   return (
     <header className="sticky top-0 z-50 w-full border-b border-border/60 bg-background/80 backdrop-blur-md supports-[backdrop-filter]:bg-background/60">
@@ -24,7 +65,7 @@ export function Navbar() {
           {/* Logo */}
           <Link
             href={base}
-            className="flex items-center gap-2 font-semibold text-foreground hover:opacity-80 transition-opacity"
+            className="flex items-center gap-2 font-semibold text-foreground hover:opacity-80 transition-opacity shrink-0"
           >
             <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-primary">
               <Briefcase className="h-4 w-4 text-primary-foreground" />
@@ -32,17 +73,35 @@ export function Navbar() {
             <span className="text-lg font-bold tracking-tight">SkillSync</span>
           </Link>
 
-          {/* Desktop nav */}
-          <nav className="hidden md:flex items-center gap-1">
+          {/* Centered role links (desktop only) */}
+          <nav className="hidden md:flex items-center gap-1 absolute left-1/2 -translate-x-1/2">
+            {roleLinks.map((link) => (
+              <Button key={link.href} variant="ghost" size="sm" asChild>
+                <Link href={link.href}>{link.label}</Link>
+              </Button>
+            ))}
+          </nav>
+
+          {/* Desktop right side: toggles + auth */}
+          <nav className="hidden md:flex items-center gap-1 shrink-0">
             <ThemeToggle />
             <LanguageSwitcher />
             <div className="mx-2 h-5 w-px bg-border" />
-            {isAuthenticated?<span>{user?.firstName}</span>:<div><Button variant="ghost" size="sm" asChild>
-              <Link href={`${base}/login`}>{t("login")}</Link>
-            </Button>
-            <Button size="sm" asChild>
-              <Link href={`${base}/register`}>{t("register")}</Link>
-            </Button></div>}
+            {isAuthenticated ? (
+              <div className="flex gap-5 items-center justify-center">
+                <span>{user?.firstName}</span>
+                <Button onClick={logout}>Logout</Button>
+              </div>
+            ) : (
+              <div className="flex items-center gap-1">
+                <Button variant="ghost" size="sm" asChild>
+                  <Link href={`${base}/login`}>{t("login")}</Link>
+                </Button>
+                <Button size="sm" asChild>
+                  <Link href={`${base}/register`}>{t("register")}</Link>
+                </Button>
+              </div>
+            )}
           </nav>
 
           {/* Mobile: toggles + hamburger */}
@@ -65,25 +124,49 @@ export function Navbar() {
       <div
         className={cn(
           "md:hidden overflow-hidden transition-all duration-200 border-t border-border/60",
-          open ? "max-h-48 opacity-100" : "max-h-0 opacity-0"
+          open ? "max-h-[28rem] opacity-100" : "max-h-0 opacity-0"
         )}
       >
         <nav className="flex flex-col gap-1 px-4 py-3">
-          <Button
-            variant="ghost"
-            className="w-full justify-start"
-            asChild
-            onClick={() => setOpen(false)}
-          >
-            <Link href={`${base}/login`}>{t("login")}</Link>
-          </Button>
-          <Button
-            className="w-full"
-            asChild
-            onClick={() => setOpen(false)}
-          >
-            <Link href={`${base}/register`}>{t("register")}</Link>
-          </Button>
+          {isAuthenticated ? (
+            <>
+              {roleLinks.map((link) => (
+                <Button
+                  key={link.href}
+                  variant="ghost"
+                  className="w-full justify-start"
+                  asChild
+                  onClick={() => setOpen(false)}
+                >
+                  <Link href={link.href}>{link.label}</Link>
+                </Button>
+              ))}
+              <Button
+                variant="ghost"
+                className="w-full justify-start"
+                onClick={() => {
+                  logout();
+                  setOpen(false);
+                }}
+              >
+                Logout
+              </Button>
+            </>
+          ) : (
+            <>
+              <Button
+                variant="ghost"
+                className="w-full justify-start"
+                asChild
+                onClick={() => setOpen(false)}
+              >
+                <Link href={`${base}/login`}>{t("login")}</Link>
+              </Button>
+              <Button className="w-full" asChild onClick={() => setOpen(false)}>
+                <Link href={`${base}/register`}>{t("register")}</Link>
+              </Button>
+            </>
+          )}
         </nav>
       </div>
     </header>
