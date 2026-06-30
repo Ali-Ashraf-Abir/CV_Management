@@ -1,14 +1,16 @@
 using backend.Dtos;
 using backend.Services.Interfaces;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace backend.Controllers;
 
 [ApiController]
-[Route("api/attributes/{attributeId:guid}/values")]
+[Route("api/attribute/{attributeId:guid}/values")]
 public class AttributeValueController(IAttributeValueService attributeValueService) : ControllerBase
 {
     [HttpGet]
+    [Authorize]
     public async Task<ActionResult<List<AttributeValueDto>>> GetAll(Guid attributeId)
     {
         var values = await attributeValueService.GetAllAttributesValueByAttributeIdAsync(attributeId);
@@ -16,6 +18,7 @@ public class AttributeValueController(IAttributeValueService attributeValueServi
     }
 
     [HttpGet("{id:guid}")]
+    [Authorize]
     public async Task<ActionResult<AttributeValueDto>> GetById(Guid id)
     {
         var value = await attributeValueService.GetAttributeValueByIdAsync(id);
@@ -23,6 +26,8 @@ public class AttributeValueController(IAttributeValueService attributeValueServi
     }
 
     [HttpPost]
+    [Authorize]
+    [Authorize(Roles = "Recruiter,Administrator")]
     public async Task<ActionResult<AttributeValueDto>> Create(
         Guid attributeId,
         CreateAttributeValueDto dto)
@@ -38,6 +43,8 @@ public class AttributeValueController(IAttributeValueService attributeValueServi
     }
 
     [HttpPut("{id:guid}")]
+    [Authorize]
+    [Authorize(Roles = "Recruiter,Administrator")]
     public async Task<ActionResult<AttributeValueDto>> Update(
         Guid attributeId,
         Guid id,

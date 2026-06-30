@@ -1,0 +1,134 @@
+{
+  "list": {
+    "eyebrow": "Lebenslauf-Builder",
+    "title": "Attribute",
+    "subtitle": "Felder, die Kandidaten in ihrem Lebenslauf ausfüllen – Titel, Typ und die Werte hinter Dropdowns.",
+    "newAttribute": "Neues Attribut",
+    "searchPlaceholder": "Attribute durchsuchen…",
+    "categoryFilterPlaceholder": "Kategorie",
+    "allCategories": "Alle Kategorien",
+    "resultsCount": "{filtered} von {total}",
+    "columns": {
+      "title": "Titel",
+      "category": "Kategorie",
+      "type": "Eingabetyp",
+      "actions": "Aktionen"
+    },
+    "rowMenu": {
+      "open": "Öffnen",
+      "edit": "Bearbeiten",
+      "delete": "Löschen"
+    },
+    "loadError": "Attribute konnten nicht geladen werden",
+    "tryAgain": "Erneut versuchen",
+    "emptyTitle": "Noch keine passenden Attribute",
+    "emptyNoneYet": "Erstellen Sie Ihr erstes Attribut, um das Lebenslauf-Formular zu gestalten.",
+    "emptyNoMatch": "Versuchen Sie einen anderen Suchbegriff oder eine andere Kategorie.",
+    "createSuccess": "„{title}“ wurde erstellt",
+    "deleteSuccess": "„{title}“ wurde gelöscht"
+  },
+  "detail": {
+    "backToList": "Alle Attribute",
+    "filterable": "Filterbar",
+    "edit": "Bearbeiten",
+    "delete": "Löschen",
+    "loadError": "Dieses Attribut konnte nicht geladen werden",
+    "tryAgain": "Erneut versuchen",
+    "noValuesTitle": "Keine Werteliste erforderlich",
+    "noValuesBody": "Felder vom Typ {type} erfassen freie Eingaben direkt von Kandidaten, daher gibt es hier nichts zu konfigurieren. Wechseln Sie den Eingabetyp zu {dropdown}, wenn Sie stattdessen eine feste Werteliste möchten.",
+    "updateSuccess": "Attribut aktualisiert",
+    "updateError": "Änderungen konnten nicht gespeichert werden",
+    "deleteSuccess": "„{title}“ wurde gelöscht"
+  },
+  "form": {
+    "createTitle": "Neues Attribut",
+    "editTitle": "Attribut bearbeiten",
+    "createDescription": "Definieren Sie ein neues Feld, das Kandidaten in ihrem Lebenslauf ausfüllen können.",
+    "editDescription": "Aktualisieren Sie, wie sich dieses Feld in jedem Kandidaten-Lebenslauf verhält.",
+    "titleLabel": "Titel",
+    "titlePlaceholder": "z. B. Berufserfahrung in Jahren",
+    "categoryLabel": "Kategorie",
+    "typeLabel": "Eingabetyp",
+    "descriptionLabel": "Beschreibung (optional)",
+    "descriptionPlaceholder": "Wird Recruitern und als Platzhaltertext den Kandidaten angezeigt",
+    "filterableLabel": "Filterbar",
+    "filterableHint": "Recruiter können Kandidaten nach diesem Feld suchen und filtern",
+    "cancel": "Abbrechen",
+    "save": "Änderungen speichern",
+    "create": "Attribut erstellen",
+    "saveError": "Das Attribut konnte nicht gespeichert werden"
+  },
+  "types": {
+    "String": { "label": "Kurztext", "hint": "Einzeilig, z. B. Berufsbezeichnung" },
+    "Text": { "label": "Langtext", "hint": "Mehrzeilig, z. B. Zusammenfassung" },
+    "Image": { "label": "Bild", "hint": "Profilfoto, Zertifikat-Scan…" },
+    "Numeric": { "label": "Zahl", "hint": "Berufserfahrung in Jahren, Notendurchschnitt…" },
+    "Date": { "label": "Datum", "hint": "Einzelnes Datum, z. B. Geburtsdatum" },
+    "Period": { "label": "Zeitraum", "hint": "Beginn – Ende, z. B. Beschäftigung" },
+    "Boolean": { "label": "Ja / Nein", "hint": "Schalter, z. B. Umzugsbereitschaft" },
+    "Dropdown": { "label": "Dropdown", "hint": "Eine Option aus einer Werteliste auswählen" }
+  },
+  "categories": {
+    "Personal": "Persönliches",
+    "Contact": "Kontakt",
+    "Education": "Ausbildung",
+    "Experience": "Erfahrung",
+    "Skills": "Fähigkeiten",
+    "Technologies": "Technologien",
+    "Projects": "Projekte",
+    "Languages": "Sprachen",
+    "Certifications": "Zertifizierungen",
+    "SoftSkills": "Soft Skills",
+    "Preferences": "Präferenzen",
+    "Availability": "Verfügbarkeit",
+    "Custom": "Benutzerdefiniert"
+  },
+  "valueForm": {
+    "addTitle": "Wert hinzufügen",
+    "editTitle": "Wert bearbeiten",
+    "description": "Eine Option, die ein Kandidat aus dem Dropdown auswählen kann.",
+    "valueLabel": "Wert",
+    "valuePlaceholder": "z. B. Remote",
+    "sortOrderLabel": "Reihenfolge",
+    "cancel": "Abbrechen",
+    "save": "Speichern",
+    "add": "Wert hinzufügen",
+    "saveError": "Der Wert konnte nicht gespeichert werden"
+  },
+  "valueTable": {
+    "title": "Dropdown-Werte",
+    "subtitle": "Was ein Kandidat auswählen kann, in Anzeigereihenfolge.",
+    "addValue": "Wert hinzufügen",
+    "columns": {
+      "value": "Wert",
+      "order": "Reihenfolge",
+      "actions": "Aktionen"
+    },
+    "empty": "Noch keine Werte – fügen Sie die erste Option hinzu, die Kandidaten auswählen können.",
+    "addSuccess": "Wert hinzugefügt",
+    "updateSuccess": "Wert aktualisiert",
+    "deleteSuccess": "Wert gelöscht",
+    "deleteTitle": "„{value}“ löschen?",
+    "deleteDescription": "Kandidaten, die diesen Wert ausgewählt haben, müssen erneut auswählen. Dies kann nicht rückgängig gemacht werden."
+  },
+  "preview": {
+    "title": "Vorschau für den Kandidaten-Lebenslauf",
+    "fillTab": "Ausfüllen",
+    "displayTab": "Im Lebenslauf",
+    "searchableTag": "(durchsuchbar)",
+    "displayNote": "Dies ist eine vereinfachte Darstellung – tatsächliche Lebenslauf-Vorlagen können dieses Feld anders gestalten.",
+    "emptyValue": "—",
+    "periodTo": "Heute"
+  },
+  "deleteAttribute": {
+    "title": "„{title}“ löschen?",
+    "description": "Dadurch werden das Attribut und alle zugehörigen Werte entfernt. Kandidaten, die es bereits ausgefüllt haben, verlieren diese Daten. Dies kann nicht rückgängig gemacht werden."
+  },
+  "common": {
+    "delete": "Löschen",
+    "cancel": "Abbrechen",
+    "to": "bis",
+    "uploadImage": "Klicken, um ein Bild hochzuladen",
+    "selectPlaceholder": "{title} auswählen"
+  }
+}

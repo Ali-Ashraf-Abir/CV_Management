@@ -1,0 +1,134 @@
+{
+  "list": {
+    "eyebrow": "CV builder",
+    "title": "Attributes",
+    "subtitle": "Fields candidates fill in on their CV — title, type, and the values behind dropdowns.",
+    "newAttribute": "New attribute",
+    "searchPlaceholder": "Search attributes…",
+    "categoryFilterPlaceholder": "Category",
+    "allCategories": "All categories",
+    "resultsCount": "{filtered} of {total}",
+    "columns": {
+      "title": "Title",
+      "category": "Category",
+      "type": "Input type",
+      "actions": "Actions"
+    },
+    "rowMenu": {
+      "open": "Open",
+      "edit": "Edit",
+      "delete": "Delete"
+    },
+    "loadError": "Couldn't load attributes",
+    "tryAgain": "Try again",
+    "emptyTitle": "No attributes match yet",
+    "emptyNoneYet": "Create your first attribute to start shaping the CV form.",
+    "emptyNoMatch": "Try a different search term or category.",
+    "createSuccess": "\"{title}\" was created",
+    "deleteSuccess": "\"{title}\" was deleted"
+  },
+  "detail": {
+    "backToList": "All attributes",
+    "filterable": "Filterable",
+    "edit": "Edit",
+    "delete": "Delete",
+    "loadError": "Couldn't load this attribute",
+    "tryAgain": "Try again",
+    "noValuesTitle": "No value list needed",
+    "noValuesBody": "{type} fields collect free input from candidates directly, so there's nothing to configure here. Switch the input type to {dropdown} if you want a fixed list of options instead.",
+    "updateSuccess": "Attribute updated",
+    "updateError": "Couldn't save changes",
+    "deleteSuccess": "\"{title}\" was deleted"
+  },
+  "form": {
+    "createTitle": "New attribute",
+    "editTitle": "Edit attribute",
+    "createDescription": "Define a new field candidates can fill in on their CV.",
+    "editDescription": "Update how this field behaves across every candidate CV.",
+    "titleLabel": "Title",
+    "titlePlaceholder": "e.g. Years of experience",
+    "categoryLabel": "Category",
+    "typeLabel": "Input type",
+    "descriptionLabel": "Description (optional)",
+    "descriptionPlaceholder": "Shown to recruiters and as placeholder text to candidates",
+    "filterableLabel": "Filterable",
+    "filterableHint": "Let recruiters search and filter candidates by this field",
+    "cancel": "Cancel",
+    "save": "Save changes",
+    "create": "Create attribute",
+    "saveError": "Couldn't save the attribute"
+  },
+  "types": {
+    "String": { "label": "Short text", "hint": "Single line, e.g. job title" },
+    "Text": { "label": "Long text", "hint": "Multi-line, e.g. summary" },
+    "Image": { "label": "Image", "hint": "Profile photo, certificate scan…" },
+    "Numeric": { "label": "Number", "hint": "Years of experience, GPA…" },
+    "Date": { "label": "Date", "hint": "Single date, e.g. birth date" },
+    "Period": { "label": "Date range", "hint": "Start – end, e.g. employment" },
+    "Boolean": { "label": "Yes / No", "hint": "Toggle, e.g. willing to relocate" },
+    "Dropdown": { "label": "Dropdown", "hint": "Pick one from a value list" }
+  },
+  "categories": {
+    "Personal": "Personal",
+    "Contact": "Contact",
+    "Education": "Education",
+    "Experience": "Experience",
+    "Skills": "Skills",
+    "Technologies": "Technologies",
+    "Projects": "Projects",
+    "Languages": "Languages",
+    "Certifications": "Certifications",
+    "SoftSkills": "Soft skills",
+    "Preferences": "Preferences",
+    "Availability": "Availability",
+    "Custom": "Custom"
+  },
+  "valueForm": {
+    "addTitle": "Add value",
+    "editTitle": "Edit value",
+    "description": "One option a candidate can pick from the dropdown.",
+    "valueLabel": "Value",
+    "valuePlaceholder": "e.g. Remote",
+    "sortOrderLabel": "Sort order",
+    "cancel": "Cancel",
+    "save": "Save",
+    "add": "Add value",
+    "saveError": "Couldn't save the value"
+  },
+  "valueTable": {
+    "title": "Dropdown values",
+    "subtitle": "What a candidate can choose from, in display order.",
+    "addValue": "Add value",
+    "columns": {
+      "value": "Value",
+      "order": "Order",
+      "actions": "Actions"
+    },
+    "empty": "No values yet — add the first option candidates can pick.",
+    "addSuccess": "Value added",
+    "updateSuccess": "Value updated",
+    "deleteSuccess": "Value deleted",
+    "deleteTitle": "Delete \"{value}\"?",
+    "deleteDescription": "Candidates who selected this value will need to pick again. This can't be undone."
+  },
+  "preview": {
+    "title": "Candidate CV preview",
+    "fillTab": "Filling it out",
+    "displayTab": "On the CV",
+    "searchableTag": "(searchable)",
+    "displayNote": "This is a simplified rendering — actual CV templates may style this field differently.",
+    "emptyValue": "—",
+    "periodTo": "Present"
+  },
+  "deleteAttribute": {
+    "title": "Delete \"{title}\"?",
+    "description": "This removes the attribute and every value attached to it. Candidates who already filled it in will lose that data. This can't be undone."
+  },
+  "common": {
+    "delete": "Delete",
+    "cancel": "Cancel",
+    "to": "to",
+    "uploadImage": "Click to upload an image",
+    "selectPlaceholder": "Select {title}"
+  }
+}

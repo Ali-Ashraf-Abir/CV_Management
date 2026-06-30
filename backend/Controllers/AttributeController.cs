@@ -1,5 +1,6 @@
 using backend.Dtos;
 using backend.Services.Interfaces;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace backend.Controllers;
@@ -8,6 +9,7 @@ namespace backend.Controllers;
 [Route("api/[controller]")]
 public class AttributeController(IAttributeService attributeService) : ControllerBase
 {
+    [Authorize]
     [HttpGet]
     public async Task<ActionResult<List<AttributeListDto>>> GetAll()
     {
@@ -23,6 +25,8 @@ public class AttributeController(IAttributeService attributeService) : Controlle
     }
 
     [HttpPost]
+    [Authorize]
+    [Authorize(Roles = "Recruiter,Administrator")]
     public async Task<ActionResult<AttributeDto>> Create(CreateAttributeDto dto)
     {
         var attribute = await attributeService.CreateAsync(dto);
@@ -34,14 +38,18 @@ public class AttributeController(IAttributeService attributeService) : Controlle
     }
 
     [HttpPut("{id:guid}")]
-    public async Task<ActionResult<AttributeDto>> Update(Guid id,UpdateAttributeDto dto)
+    [Authorize]
+    [Authorize(Roles = "Recruiter,Administrator")]
+    public async Task<ActionResult<AttributeDto>> Update(Guid id, UpdateAttributeDto dto)
     {
- 
-        var attribute = await attributeService.UpdateAsync(dto,id);
+
+        var attribute = await attributeService.UpdateAsync(dto, id);
         return Ok(attribute);
     }
 
     [HttpDelete("{id:guid}")]
+    [Authorize]
+    [Authorize(Roles = "Recruiter,Administrator")]
     public async Task<IActionResult> Delete(Guid id)
     {
         await attributeService.DeleteAttribute(id);

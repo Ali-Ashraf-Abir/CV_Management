@@ -8,12 +8,13 @@ export default getRequestConfig(async ({ requestLocale }) => {
     locale = routing.defaultLocale;
   }
 
-  const [nav, theme, language, login, register] = await Promise.all([
+  const [nav, theme, language, login, register, attributes] = await Promise.all([
     import(`../messages/${locale}/nav.json`),
     import(`../messages/${locale}/theme.json`),
     import(`../messages/${locale}/language.json`),
     import(`../messages/${locale}/login.json`),
     import(`../messages/${locale}/register.json`),
+    import(`../messages/${locale}/attributes.json`),
   ]);
 
   return {
@@ -24,6 +25,7 @@ export default getRequestConfig(async ({ requestLocale }) => {
       language: language.default,
       login: login.default,
       register: register.default,
+      attributes: attributes.default,
     },
   };
 });
