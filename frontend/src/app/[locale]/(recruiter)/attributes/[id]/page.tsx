@@ -144,6 +144,7 @@ export default function AttributeDetailPage() {
                 <AttributeValueTable
                   attributeId={attribute.id}
                   values={attribute.values}
+                  version={attribute.version}
                   onChange={(values) => setAttribute({ ...attribute, values })}
                 />
               </CardContent>

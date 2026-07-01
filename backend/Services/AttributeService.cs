@@ -45,7 +45,8 @@ public class AttributeService(ApplicationDbContext _db) : IAttributeService
                 {
                     Id = v.Id,
                     Value = v.Value,
-                    SortOrder = v.SortOrder
+                    SortOrder = v.SortOrder,
+                    Version= v.Version
                 })
                 .ToList()
         };

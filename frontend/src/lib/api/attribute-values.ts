@@ -5,7 +5,7 @@ import { api } from "../api";
 export const attributeValuesApi = {
   list: async (attributeId: string): Promise<AttributeValueDto[]> => {
     const { data } = await api.get<AttributeValueDto[]>(
-      `/attributes/${attributeId}/values`
+      `/attribute/${attributeId}/values`
     );
     return data;
   },
@@ -14,7 +14,7 @@ export const attributeValuesApi = {
     dto: CreateAttributeValueDto
   ): Promise<AttributeValueDto> => {
     const { data } = await api.post<AttributeValueDto>(
-      `/attributes/${attributeId}/values`,
+      `/attribute/${attributeId}/values`,
       dto
     );
     return data;
@@ -25,12 +25,12 @@ export const attributeValuesApi = {
     dto: UpdateAttributeValueDto
   ): Promise<AttributeValueDto> => {
     const { data } = await api.put<AttributeValueDto>(
-      `/attributes/${attributeId}/values/${id}`,
+      `/attribute/${attributeId}/values/${id}`,
       dto
     );
     return data;
   },
   remove: async (attributeId: string, id: string): Promise<void> => {
-    await api.delete(`/attributes/${attributeId}/values/${id}`);
+    await api.delete(`/attribute/${attributeId}/values/${id}`);
   },
 };

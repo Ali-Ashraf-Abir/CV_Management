@@ -8,4 +8,5 @@ public class UpdateAttributeValueDto
     public string Value { get; set; } = string.Empty;
     [Required]
     public int SortOrder { get; set; }
+    public int Version{get;set;}
 }

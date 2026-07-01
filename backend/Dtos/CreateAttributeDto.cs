@@ -19,4 +19,5 @@ public class CreateAttributeDto
     public string? Description { get; set; }
 
     public bool IsFilterable { get; set; }
+
 }

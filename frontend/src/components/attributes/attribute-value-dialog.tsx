@@ -20,6 +20,8 @@ import { AttributeValueDto } from "@/types/attribute";
 interface ValueFormValues {
   value: string;
   sortOrder: number;
+  version : number;
+
 }
 
 interface AttributeValueDialogProps {
@@ -38,7 +40,7 @@ export function AttributeValueDialog({
   onSubmit,
 }: AttributeValueDialogProps) {
   const t = useTranslations("attributes.valueForm");
-  const [values, setValues] = useState<ValueFormValues>({ value: "", sortOrder: 0 });
+  const [values, setValues] = useState<ValueFormValues>({ value: "", sortOrder: 0,version:0 });
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const isEdit = Boolean(existingValue);
@@ -48,8 +50,8 @@ export function AttributeValueDialog({
       setError(null);
       setValues(
         existingValue
-          ? { value: existingValue.value, sortOrder: existingValue.sortOrder }
-          : { value: "", sortOrder: nextSortOrder }
+          ? { value: existingValue.value, sortOrder: existingValue.sortOrder,version:existingValue.version }
+          : { value: "", sortOrder: nextSortOrder,version:0 }
       );
     }
   }, [open, existingValue, nextSortOrder]);

@@ -63,6 +63,7 @@ export interface AttributeValueDto {
   attributeId?: string;
   value: string;
   sortOrder: number;
+  version:number;
 }
 
 export interface AttributeListDto {

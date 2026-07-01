@@ -20,6 +20,7 @@ public class AttributeValueService(ApplicationDbContext _db) : IAttributeValueSe
                 AttributeId = av.AttributeId,
                 Value = av.Value,
                 SortOrder = av.SortOrder,
+                
             })
             .ToListAsync();
     }
@@ -35,17 +36,19 @@ public class AttributeValueService(ApplicationDbContext _db) : IAttributeValueSe
             Id = result.Id,
             Value = result.Value,
             AttributeId = result.AttributeId,
-            SortOrder = result.SortOrder
+            SortOrder = result.SortOrder,
+            Version = result.Version
         };
 
     }
     public async Task<AttributeValueDto> CreateAttributeValueAsync(CreateAttributeValueDto dto)
     {
+    
         var newAttribute = new AttributeValue
         {
             AttributeId = dto.AttributeId,
             Value = dto.Value,
-            SortOrder = dto.SortOrder
+            SortOrder = dto.SortOrder,
 
         };
         _db.Add(newAttribute);
@@ -65,9 +68,14 @@ public class AttributeValueService(ApplicationDbContext _db) : IAttributeValueSe
         {
             throw new NotFoundException("Attribute Value Not Found");
         }
+        if(attributeValue.Version != dto.Version)
+        {
+            throw new ConflictException("The Data Has Already Been Edited");
+        }
 
         attributeValue.Value = dto.Value;
         attributeValue.SortOrder = dto.SortOrder;
+        attributeValue.Version++;
 
         await _db.SaveChangesAsync();
         return new AttributeValueDto
@@ -75,7 +83,8 @@ public class AttributeValueService(ApplicationDbContext _db) : IAttributeValueSe
             Id = attributeValue.Id,
             Value = attributeValue.Value,
             AttributeId = attributeValue.AttributeId,
-            SortOrder = attributeValue.SortOrder
+            SortOrder = attributeValue.SortOrder,
+            Version= attributeValue.Version
         };
 
     }
