@@ -76,6 +76,7 @@ public class AttributeValueService(ApplicationDbContext _db) : IAttributeValueSe
         attributeValue.Value = dto.Value;
         attributeValue.SortOrder = dto.SortOrder;
         attributeValue.Version++;
+        attributeValue.UpdatedAt=DateTime.UtcNow;
 
         await _db.SaveChangesAsync();
         return new AttributeValueDto

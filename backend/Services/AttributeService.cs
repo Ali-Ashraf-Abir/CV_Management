@@ -94,6 +94,7 @@ public class AttributeService(ApplicationDbContext _db) : IAttributeService
         attribute.Type = dto.Type;
         attribute.Description = dto.Description;
         attribute.IsFilterable = dto.IsFilterable;
+        attribute.UpdatedAt = DateTime.UtcNow;
         attribute.Version++;
 
         await _db.SaveChangesAsync();
