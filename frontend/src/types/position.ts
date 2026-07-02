@@ -89,8 +89,9 @@ export interface PositionRequirementDto {
   attributeCategory: AttributeCategory;
   attributeType: AttributeType;
   operator: RequirementOperator;
-  value: string | null;
-  secondValue: string | null;
+  value: string ;
+  secondValue: string ;
+  hasRequirement:boolean;
   version: number;
   createdAt: string;
   updatedAt: string;
@@ -98,17 +99,20 @@ export interface PositionRequirementDto {
 
 export interface CreatePositionRequirementDto {
   attributeId: string;
-  operator: RequirementOperator;
-  value?: string | null;
-  secondValue?: string | null;
+  hasRequirement: boolean;
+  operator?: RequirementOperator;
+  value?: string;
+  secondValue?: string;
 }
 
 export interface UpdatePositionRequirementDto {
-  operator: RequirementOperator;
-  value?: string | null;
-  secondValue?: string | null;
+  hasRequirement: boolean;
+  operator?: RequirementOperator;
+  value?: string;
+  secondValue?: string;
   version: number;
 }
+
 
 export interface PositionDto {
   id: string;

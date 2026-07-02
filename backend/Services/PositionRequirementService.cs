@@ -3,6 +3,7 @@ using backend.Data;
 using backend.Dtos;
 using backend.Enums;
 using backend.Exceptions;
+using backend.Models;
 using backend.Services.Interfaces;
 using Microsoft.EntityFrameworkCore;
 using ModelAttribute = backend.Models.Attribute;
@@ -16,7 +17,8 @@ public class PositionsRequirementService(ApplicationDbContext _db) : IPositionRe
     public async Task<List<PositionRequirementDto>> GetForPositionAsync(Guid positionId)
     {
         var positionExists = await _db.Positions.AnyAsync(p => p.Id == positionId);
-        if (!positionExists){
+        if (!positionExists)
+        {
             throw new NotFoundException("Position was not found.");
         }
 
@@ -33,10 +35,12 @@ public class PositionsRequirementService(ApplicationDbContext _db) : IPositionRe
         var attribute = await _db.Attribute.Include(a => a.Values).FirstOrDefaultAsync(a => a.Id == dto.AttributeId) ?? throw new NotFoundException("Attribute was not found.");
 
         var duplicate = await _db.PositionsRequirement.AnyAsync(r => r.PositionId == positionId && r.AttributeId == dto.AttributeId);
-        if (duplicate){
+        if (duplicate)
+        {
             throw new ConflictException("A requirement for this attribute already exists on this position.");
         }
-        var requirement = BuildRequirement(positionId, attribute, dto.Operator, dto.Value, dto.SecondValue);
+
+        var requirement = BuildRequirement(positionId, attribute, dto.Operator, dto.Value, dto.SecondValue,dto.HasRequirement);
         _db.PositionsRequirement.Add(requirement);
         position.UpdatedAt = DateTime.UtcNow;
         position.Version += 1;
@@ -46,20 +50,22 @@ public class PositionsRequirementService(ApplicationDbContext _db) : IPositionRe
 
     public async Task<PositionRequirementDto> UpdateAsync(Guid positionId, Guid requirementId, Guid userId, Roles role, UpdatePositionRequirementDto dto)
     {
-        var position = await _db.Positions.FirstOrDefaultAsync(p => p.Id == positionId)?? throw new NotFoundException("Position was not found.");
+        var position = await _db.Positions.FirstOrDefaultAsync(p => p.Id == positionId) ?? throw new NotFoundException("Position was not found.");
         var requirement = await _db.PositionsRequirement.Include(r => r.Attribute).ThenInclude(a => a.Values)
         .FirstOrDefaultAsync(r => r.Id == requirementId && r.PositionId == positionId)
             ?? throw new NotFoundException("Requirement was not found.");
 
-        if (requirement.Version != dto.Version){
+        if (requirement.Version != dto.Version)
+        {
             throw new ConflictException("Requirement was modified by someone else since you loaded it. Refresh and try again.");
         }
-        ValidateOperatorForAttribute(requirement.Attribute, dto.Operator, dto.Value, dto.SecondValue);
+        ValidateOperatorForAttribute(requirement.Attribute,dto.HasRequirement, dto.Operator, dto.Value, dto.SecondValue);
         requirement.Operator = dto.Operator;
         requirement.Value = dto.Value?.Trim();
         requirement.SecondValue = dto.SecondValue?.Trim();
         requirement.UpdatedAt = DateTime.UtcNow;
         requirement.Version += 1;
+        requirement.HasRequirement= dto.HasRequirement;
         position.UpdatedAt = DateTime.UtcNow;
         position.Version += 1;
         await _db.SaveChangesAsync();
@@ -93,11 +99,11 @@ public class PositionsRequirementService(ApplicationDbContext _db) : IPositionRe
         [AttributeType.Dropdown] = new[] { RequirementOperator.Equals, RequirementOperator.NotEquals, RequirementOperator.In }
     };
 
-    private static Models.PositionRequirement BuildRequirement(Guid positionId, ModelAttribute attribute, RequirementOperator op, string? value, string? secondValue)
+    private static PositionRequirement BuildRequirement(Guid positionId, ModelAttribute attribute, RequirementOperator? op, string? value, string? secondValue,bool HasRequirement)
     {
-        ValidateOperatorForAttribute(attribute, op, value, secondValue);
+        ValidateOperatorForAttribute(attribute,HasRequirement, op, value, secondValue);
 
-        return new Models.PositionRequirement
+        return new PositionRequirement
         {
             Id = Guid.NewGuid(),
             PositionId = positionId,
@@ -107,16 +113,22 @@ public class PositionsRequirementService(ApplicationDbContext _db) : IPositionRe
             SecondValue = secondValue?.Trim(),
             CreatedAt = DateTime.UtcNow,
             UpdatedAt = DateTime.UtcNow,
+            HasRequirement = HasRequirement,
             Version = 1
         };
     }
 
-    private static void ValidateOperatorForAttribute(ModelAttribute attribute, RequirementOperator op, string? value, string? secondValue)
+    private static void ValidateOperatorForAttribute(ModelAttribute attribute,bool hasRequirement, RequirementOperator? op, string? value, string? secondValue)
     {
-        if (!attribute.IsFilterable)
+        if (hasRequirement==true && !attribute.IsFilterable)
             throw new ConflictException($"Attribute '{attribute.Title}' is not filterable and cannot be used as a position requirement.");
 
-        if (!AllowedOperators.TryGetValue(attribute.Type, out var operators) || !operators.Contains(op))
+        if (op is null)
+        {
+            return ;
+        }
+
+        if (!AllowedOperators.TryGetValue(attribute.Type, out var operators) || !operators.Contains(op.Value))
             throw new ConflictException($"Operator '{op}' is not valid for attribute type '{attribute.Type}'.");
 
         if (string.IsNullOrWhiteSpace(value))
@@ -161,7 +173,7 @@ public class PositionsRequirementService(ApplicationDbContext _db) : IPositionRe
             throw new ConflictException($"'{value}' is not a valid date.");
     }
 
-    private static void ValidateDropdownValue(ModelAttribute attribute, string value, RequirementOperator op)
+    private static void ValidateDropdownValue(ModelAttribute attribute, string value, RequirementOperator? op)
     {
         var validValues = attribute.Values.Select(v => v.Value).ToHashSet(StringComparer.OrdinalIgnoreCase);
 
@@ -179,7 +191,7 @@ public class PositionsRequirementService(ApplicationDbContext _db) : IPositionRe
         }
     }
 
-    private static PositionRequirementDto MapToDto(Models.PositionRequirement requirement, ModelAttribute attribute)
+    private static PositionRequirementDto MapToDto(PositionRequirement requirement, ModelAttribute attribute)
     {
         return new PositionRequirementDto
         {
@@ -190,6 +202,7 @@ public class PositionsRequirementService(ApplicationDbContext _db) : IPositionRe
             AttributeType = attribute.Type,
             Operator = requirement.Operator,
             Value = requirement.Value,
+            HasRequirement = requirement.HasRequirement,
             SecondValue = requirement.SecondValue,
             Version = requirement.Version,
             CreatedAt = requirement.CreatedAt,

@@ -10,8 +10,8 @@ public class PositionRequirement
 
     public Guid AttributeId { get; set; }
     public Attribute Attribute { get; set; } = null!;
-
-    public RequirementOperator Operator { get; set; }
+    public bool HasRequirement{get;set;} = false;
+    public RequirementOperator? Operator { get; set; }
 
     public string? Value { get; set; }
 

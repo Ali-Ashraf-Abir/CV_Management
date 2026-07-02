@@ -10,8 +10,9 @@ public class PositionRequirementDto
     public string AttributeTitle { get; set; } = string.Empty;
     public AttributeCategory AttributeCategory { get; set; }
     public AttributeType AttributeType { get; set; }
-    public RequirementOperator Operator { get; set; }
+    public RequirementOperator? Operator { get; set; }
     public string? Value { get; set; }
+    public bool HasRequirement{get;set;}
     public string? SecondValue { get; set; }
     public int Version { get; set; }
     public DateTime CreatedAt { get; set; }
@@ -23,7 +24,8 @@ public class CreatePositionRequirementDto
     [Required]
     public Guid AttributeId { get; set; }
     [Required]
-    public RequirementOperator Operator { get; set; }
+    public bool HasRequirement{get;set;}
+    public RequirementOperator? Operator { get; set; }
 
     [StringLength(500)]
     public string? Value { get; set; }
@@ -39,7 +41,7 @@ public class UpdatePositionRequirementDto
 
     [StringLength(500)]
     public string? Value { get; set; }
-
+    public bool HasRequirement{get;set;}
     [StringLength(500)]
     public string? SecondValue { get; set; }
 

@@ -46,6 +46,7 @@ export function RequirementList({
         {!readOnly && (
           <RequirementFormDialog
             mode="add"
+            hasRequirement={false}
             positionId={positionId}
             existingAttributeIds={requirements.map((r) => r.attributeId)}
             onSaved={(created) => onChange([...requirements, created])}
@@ -113,19 +114,20 @@ function RequirementRow({
   return (
     <Card>
       <CardContent className="flex items-center justify-between gap-4 py-3">
-        <div className="min-w-0">
+         <div className="min-w-0">
           <div className="flex items-center gap-2">
             <span className="font-medium">{requirement.attributeTitle}</span>
             <Badge variant="secondary" className="font-normal">
               {CATEGORY_LABEL[requirement.attributeCategory]}
             </Badge>
           </div>
-          <p className="text-sm text-muted-foreground">{formatRequirementRule(requirement)}</p>
+          {requirement.hasRequirement ?<p className="text-sm text-muted-foreground">{formatRequirementRule(requirement)}</p>:<div className="text-accent-foreground">No requirment</div>}
         </div>
 
         {!readOnly && (
           <div className="flex shrink-0 items-center">
             <RequirementFormDialog
+              hasRequirement={requirement.hasRequirement}
               mode="edit"
               positionId={positionId}
               requirement={requirement}

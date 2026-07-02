@@ -7,23 +7,19 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { toast } from "sonner";
 import { ArrowLeft, CalendarClock, Loader2 } from "lucide-react";
 import { z } from "zod";
-
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Separator } from "@/components/ui/separator";
-import { Form } from "@/components/ui/form";
-
 import { positionsApi } from "@/lib/api/position";
-
 import { extractErrorMessage } from "@/lib/api";
-
 import { CATEGORY_ICON, CATEGORY_LABEL, CATEGORY_ORDER } from "@/lib/constants/attribute-category";
 import { PositionDto, PositionRequirementDto, AttributeCategory } from "@/types/position";
 import { PositionStatusBadge } from "@/components/positions/position-status-badge";
 import { AttributeValueField } from "./attribute-value-field";
 import { positionRequirementsApi } from "@/lib/api/positionRequirement";
 import { buildAttributeValueSchema } from "@/validations/attribute-value.schema";
+import { Form } from "../ui/form";
 
 export type CandidateProfileValues = { values: Record<string, string> };
 

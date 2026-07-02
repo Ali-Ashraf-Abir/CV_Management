@@ -5,21 +5,20 @@ import { AttributeSummaryDto } from "@/types/attribute";
 
 const isNumeric = (v: string) => v.trim() !== "" && !Number.isNaN(Number(v));
 const isDate = (v: string) => !Number.isNaN(new Date(v).getTime());
-
-/**
- * Builds a schema tailored to one attribute's type, so the operator picker
- * and value input(s) validate exactly the way the backend will.
- */
 export function buildRequirementSchema(attribute: AttributeSummaryDto | null) {
   return z
     .object({
       attributeId: z.string().uuid("Choose an attribute."),
-      operator: z.string().min(1, "Choose an operator.") as z.ZodType<RequirementOperator>,
-      value: z.string().trim().min(1, "A value is required."),
+      operator: z.string().optional() as z.ZodType<RequirementOperator>,
+      value: z.string().trim().optional(),
+      hasRequirement: z.boolean(),
       secondValue: z.string().trim().optional(),
     })
     .superRefine((data, ctx) => {
       if (!attribute) return;
+      if (!data.hasRequirement) {
+        return;
+      }
 
       const allowed = ALLOWED_OPERATORS_BY_TYPE[attribute.type];
       if (!allowed.includes(data.operator)) {
@@ -97,7 +96,9 @@ export function buildRequirementSchema(attribute: AttributeSummaryDto | null) {
         }
       };
 
-      checkValue(data.value, "value");
+      if(data.value){
+        checkValue(data.value, "value");
+      }
       if (data.operator === "Between" && data.secondValue) {
         checkValue(data.secondValue, "secondValue");
       }
@@ -108,5 +109,6 @@ export type RequirementFormValues = {
   attributeId: string;
   operator: RequirementOperator | "";
   value: string;
+  hasRequirement:boolean;
   secondValue: string;
 };

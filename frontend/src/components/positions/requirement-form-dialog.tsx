@@ -2,7 +2,7 @@
 
 import { useEffect, useMemo, useState } from "react";
 import { useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
+
 import { toast } from "sonner";
 import { Loader2, Plus, Pencil } from "lucide-react";
 
@@ -37,22 +37,25 @@ import { attributesApi } from "@/lib/api/attributes";
 import { extractErrorMessage } from "@/lib/api";
 
 import { OPERATOR_LABEL } from "@/lib/constants/requirement-operator";
-import { ALLOWED_OPERATORS_BY_TYPE, PositionRequirementDto } from "@/types/position";
+import { ALLOWED_OPERATORS_BY_TYPE, PositionRequirementDto, RequirementOperator } from "@/types/position";
 import { AttributeSummaryDto } from "@/types/attribute";
 import { RequirementValueFields } from "./requirement-value-fields";
 import { buildRequirementSchema, RequirementFormValues } from "@/validations/requirement.schema";
 import { positionRequirementsApi } from "@/lib/api/positionRequirement";
+import { Checkbox } from "../ui/checkbox";
 
 type RequirementFormDialogProps =
   | {
     mode: "add";
     positionId: string;
+    hasRequirement: boolean;
     existingAttributeIds: string[];
     onSaved: (requirement: PositionRequirementDto) => void;
   }
   | {
     mode: "edit";
     positionId: string;
+    hasRequirement: boolean;
     requirement: PositionRequirementDto;
     onSaved: (requirement: PositionRequirementDto) => void;
   };
@@ -75,8 +78,7 @@ export function RequirementFormDialog(props: RequirementFormDialogProps) {
     if (mode !== "add" || !attributes) return [];
     return attributes.filter((a) => !props.existingAttributeIds.includes(a.id));
   }, [attributes, mode, props]);
-  console.log(attributes)
-  console.log(availableAttributes)
+
   const form = useForm<RequirementFormValues>({
     defaultValues:
       mode === "edit"
@@ -84,14 +86,14 @@ export function RequirementFormDialog(props: RequirementFormDialogProps) {
           attributeId: props.requirement.attributeId,
           operator: props.requirement.operator,
           value: props.requirement.value ?? "",
+          hasRequirement: props.hasRequirement || false,
           secondValue: props.requirement.secondValue ?? "",
         }
-        : { attributeId: "", operator: "", value: "", secondValue: "" },
+        : { attributeId: "", operator: "", value: "", secondValue: "", hasRequirement: false },
   });
-
+  const hasRequirement = form.watch("hasRequirement");
   const attributeId = form.watch("attributeId");
   const operator = form.watch("operator");
-
   const selectedAttribute: AttributeSummaryDto | null = useMemo(() => {
     if (mode === "edit") {
       return {
@@ -121,7 +123,9 @@ export function RequirementFormDialog(props: RequirementFormDialogProps) {
   }, [attributeId]);
 
   async function onSubmit(values: RequirementFormValues) {
+    console.log(values)
     const parsed = schema.safeParse(values);
+    console.log('hit', parsed)
     if (!parsed.success) {
       parsed.error.issues.forEach((issue) => {
         form.setError(issue.path[0] as keyof RequirementFormValues, { message: issue.message });
@@ -130,16 +134,26 @@ export function RequirementFormDialog(props: RequirementFormDialogProps) {
     }
 
     try {
-      const payload = {
-        operator: values.operator as PositionRequirementDto["operator"],
-        value: values.value,
-        secondValue: values.operator === "Between" ? values.secondValue : undefined,
-      };
+      const payload = values.hasRequirement
+        ? {
+          attributeId: values.attributeId,
+          hasRequirement: true,
+          operator: values.operator as RequirementOperator,
+          value: values.value,
+          secondValue: values.secondValue || undefined,
+        }
+        : {
+          attributeId: values.attributeId,
+          hasRequirement: false,
+          operator: undefined,
+          value: undefined,
+          secondValue: undefined,
+        };
 
       const saved =
         mode === "add"
           ? await positionRequirementsApi.add(positionId, {
-            attributeId: values.attributeId,
+
             ...payload,
           })
           : await positionRequirementsApi.update(positionId, props.requirement.id, {
@@ -226,32 +240,60 @@ export function RequirementFormDialog(props: RequirementFormDialogProps) {
                 )}
               />
             )}
-
-            {selectedAttribute && (
-              <FormField
-                control={form.control}
-                name="operator"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Operator</FormLabel>
-                    <Select value={field.value} onValueChange={field.onChange}>
+            {
+              selectedAttribute && (
+                <FormField
+                  control={form.control}
+                  name="hasRequirement"
+                  render={({ field }) => (
+                    <FormItem className="flex flex-row items-center space-x-2">
                       <FormControl>
-                        <SelectTrigger className="w-full">
-                          <SelectValue placeholder="Choose an operator" />
-                        </SelectTrigger>
+                        <Checkbox
+                          checked={field.value}
+                          onCheckedChange={(checked) => {
+                            const value = checked === true;
+                            field.onChange(value);
+                       
+                          }}
+                        />
                       </FormControl>
-                      <SelectContent>
-                        {allowedOperators.map((op) => (
-                          <SelectItem key={op} value={op}>
-                            {OPERATOR_LABEL[op]}
-                          </SelectItem>
-                        ))}
-                      </SelectContent>
-                    </Select>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
+
+                      <FormLabel>Has requirement</FormLabel>
+                    </FormItem>
+                  )}
+                />
+              )
+            }
+            {hasRequirement && (
+              <div className="">
+
+                <FormField
+                  control={form.control}
+                  name="operator"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Operator</FormLabel>
+                      <Select value={field.value} onValueChange={field.onChange}>
+                        <FormControl>
+                          <SelectTrigger className="w-full">
+                            <SelectValue placeholder="Choose an operator" />
+                          </SelectTrigger>
+                        </FormControl>
+                        <SelectContent>
+                          {allowedOperators.map((op) => (
+                            <SelectItem key={op} value={op}>
+                              {OPERATOR_LABEL[op]}
+                            </SelectItem>
+                          ))}
+                        </SelectContent>
+                      </Select>
+                      <FormMessage />
+
+
+                    </FormItem>
+                  )}
+                />
+              </div>
             )}
 
             {selectedAttribute && operator && (
@@ -260,6 +302,7 @@ export function RequirementFormDialog(props: RequirementFormDialogProps) {
                 attribute={selectedAttribute}
                 operator={operator}
               />
+
             )}
 
             <DialogFooter>
