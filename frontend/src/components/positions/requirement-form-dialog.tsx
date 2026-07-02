@@ -38,7 +38,7 @@ import { extractErrorMessage } from "@/lib/api";
 
 import { OPERATOR_LABEL } from "@/lib/constants/requirement-operator";
 import { ALLOWED_OPERATORS_BY_TYPE, PositionRequirementDto, RequirementOperator } from "@/types/position";
-import { AttributeSummaryDto } from "@/types/attribute";
+import { AttributeDto, AttributeSummaryDto } from "@/types/attribute";
 import { RequirementValueFields } from "./requirement-value-fields";
 import { buildRequirementSchema, RequirementFormValues } from "@/validations/requirement.schema";
 import { positionRequirementsApi } from "@/lib/api/positionRequirement";
@@ -64,7 +64,7 @@ export function RequirementFormDialog(props: RequirementFormDialogProps) {
   const { mode, positionId, onSaved } = props;
   const [open, setOpen] = useState(false);
   const [attributes, setAttributes] = useState<AttributeSummaryDto[] | null>(null);
-
+  const [attributeDetails, setAttributeDetials] = useState<AttributeDto | null>(null);
   useEffect(() => {
     if (open && mode === "add" && attributes === null) {
       attributesApi
@@ -107,7 +107,16 @@ export function RequirementFormDialog(props: RequirementFormDialogProps) {
     }
     return attributes?.find((a) => a.id === attributeId) ?? null;
   }, [mode, props, attributes, attributeId]);
-
+  useEffect(() => {
+    if (selectedAttribute) {
+      attributesApi.getById(selectedAttribute.id).then(setAttributeDetials)
+    }
+  }, [selectedAttribute])
+  useEffect(() => {
+    if (attributeDetails && selectedAttribute) {
+      selectedAttribute.values = attributeDetails.values
+    }
+  }, [attributeDetails])
   // Re-validate against the freshly selected attribute's rules on every change.
   const schema = useMemo(() => buildRequirementSchema(selectedAttribute), [selectedAttribute]);
 
@@ -253,7 +262,7 @@ export function RequirementFormDialog(props: RequirementFormDialogProps) {
                           onCheckedChange={(checked) => {
                             const value = checked === true;
                             field.onChange(value);
-                       
+
                           }}
                         />
                       </FormControl>
@@ -299,6 +308,7 @@ export function RequirementFormDialog(props: RequirementFormDialogProps) {
             {selectedAttribute && operator && (
               <RequirementValueFields
                 control={form.control}
+                attributeDetails={attributeDetails}
                 attribute={selectedAttribute}
                 operator={operator}
               />

@@ -12,12 +12,13 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
-import { AttributeSummaryDto } from "@/types/attribute";
+import { AttributeDto, AttributeSummaryDto } from "@/types/attribute";
 import { RequirementFormValues } from "@/validations/requirement.schema";
 
 
 interface RequirementValueFieldsProps {
   control: Control<RequirementFormValues>;
+  attributeDetails: AttributeDto | null;
   attribute: AttributeSummaryDto;
   operator: string;
 }
@@ -27,11 +28,13 @@ function ValueControl({
   value,
   onChange,
   placeholder,
+  attributeDetails
 }: {
   attribute: AttributeSummaryDto;
   value: string;
   onChange: (v: string) => void;
   placeholder: string;
+  attributeDetails: AttributeDto | null;
 }) {
   switch (attribute.type) {
     case "Numeric":
@@ -66,7 +69,7 @@ function ValueControl({
             <SelectValue placeholder="Choose an option" />
           </SelectTrigger>
           <SelectContent>
-            {attribute.values.map((v) => (
+            {attributeDetails?.values?.map((v) => (
               <SelectItem key={v.id} value={v.value}>
                 {v.value}
               </SelectItem>
@@ -81,10 +84,10 @@ function ValueControl({
   }
 }
 
-export function RequirementValueFields({ control, attribute, operator }: RequirementValueFieldsProps) {
+export function RequirementValueFields({ control, attribute, operator, attributeDetails }: RequirementValueFieldsProps) {
   const isBetween = operator === "Between";
   const isMultiDropdown = operator === "In" && attribute.type === "Dropdown";
-
+  console.log(attributeDetails)
   return (
     <div className="space-y-4">
       <FormField
@@ -109,6 +112,7 @@ export function RequirementValueFields({ control, attribute, operator }: Require
               ) : (
                 <ValueControl
                   attribute={attribute}
+                  attributeDetails={attributeDetails}
                   value={field.value}
                   onChange={field.onChange}
                   placeholder="Enter a value"
@@ -129,6 +133,7 @@ export function RequirementValueFields({ control, attribute, operator }: Require
               <FormLabel>To</FormLabel>
               <FormControl>
                 <ValueControl
+                  attributeDetails={attributeDetails}
                   attribute={attribute}
                   value={field.value ?? ""}
                   onChange={field.onChange}

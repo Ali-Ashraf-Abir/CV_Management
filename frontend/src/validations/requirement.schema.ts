@@ -69,7 +69,7 @@ export function buildRequirementSchema(attribute: AttributeSummaryDto | null) {
             break;
           case "Dropdown": {
             const validValues = new Set(
-              attribute.values.map((v) => v.value.toLowerCase())
+              attribute?.values?.map((v) => v.value.toLowerCase())
             );
             const tokens =
               data.operator === "In"
