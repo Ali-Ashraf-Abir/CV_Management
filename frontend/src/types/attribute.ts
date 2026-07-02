@@ -114,3 +114,11 @@ export const VALUE_LIST_TYPES: AttributeType[] = ["Dropdown"];
 export function requiresValues(type: AttributeType) {
   return VALUE_LIST_TYPES.includes(type);
 }
+export interface AttributeSummaryDto {
+  id: string;
+  title: string;
+  category: AttributeCategory;
+  type: AttributeType;
+  isFilterable: boolean;
+  values: AttributeValueDto[];
+}

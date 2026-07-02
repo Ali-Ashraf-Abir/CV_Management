@@ -1,4 +1,4 @@
-import { AttributeDto, AttributeListDto, CreateAttributeDto, UpdateAttributeDto } from "@/types/attribute";
+import { AttributeDto, AttributeListDto, AttributeSummaryDto, CreateAttributeDto, UpdateAttributeDto } from "@/types/attribute";
 import { api } from "../api";
 
 
@@ -22,4 +22,9 @@ export const attributesApi = {
   remove: async (id: string): Promise<void> => {
     await api.delete(`/attribute/${id}`);
   },
+  listFilterable: async (): Promise<AttributeSummaryDto[]> => {
+    const { data } = await api.get<AttributeSummaryDto[]>("/attribute");
+    return data
+  },
+
 };
