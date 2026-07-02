@@ -25,7 +25,10 @@ public class Attribute
     [Range(0, int.MaxValue)]
     public int Version { get; set; }
 
-    public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
+    public DateTime CreatedAt { get; set; } 
+
+    public DateTime UpdatedAt{get;set;} 
 
     public ICollection<AttributeValue> Values { get; set; } = new List<AttributeValue>();
+    public ICollection<PositionRequirement> PositionRequirements { get; set; } = [];
 }

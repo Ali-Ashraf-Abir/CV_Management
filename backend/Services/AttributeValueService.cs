@@ -12,9 +12,8 @@ public class AttributeValueService(ApplicationDbContext _db) : IAttributeValueSe
 
     public async Task<List<AttributeValueDto>> GetAllAttributesValueByAttributeIdAsync(Guid id)
     {
-        return await _db.AttributeValue
-            .Where(av => av.AttributeId == id)
-            .Select(av => new AttributeValueDto
+        return await _db.AttributeValue.Where(av => av.AttributeId == id)
+        .Select(av => new AttributeValueDto
             {
                 Id = av.Id,
                 AttributeId = av.AttributeId,
@@ -99,4 +98,6 @@ public class AttributeValueService(ApplicationDbContext _db) : IAttributeValueSe
         _db.Remove(attributeValue);
         await _db.SaveChangesAsync();
     }
+
+    
 }

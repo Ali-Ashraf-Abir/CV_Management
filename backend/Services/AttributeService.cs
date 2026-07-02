@@ -23,9 +23,7 @@ public class AttributeService(ApplicationDbContext _db) : IAttributeService
 
     public async Task<AttributeDto> GetByIdAsync(Guid id)
     {
-        var result = await _db.Attribute
-            .Include(a => a.Values)
-            .FirstOrDefaultAsync(a => a.Id == id);
+        var result = await _db.Attribute.Include(a => a.Values).FirstOrDefaultAsync(a => a.Id == id);
 
         if (result == null)
             throw new NotFoundException("No Attribute Found");
@@ -38,7 +36,7 @@ public class AttributeService(ApplicationDbContext _db) : IAttributeService
             Type = result.Type,
             Description = result.Description,
             IsFilterable = result.IsFilterable,
-            Version= result.Version,
+            Version = result.Version,
             Values = result.Values
                 .OrderBy(v => v.SortOrder)
                 .Select(v => new AttributeValueDto
@@ -46,7 +44,7 @@ public class AttributeService(ApplicationDbContext _db) : IAttributeService
                     Id = v.Id,
                     Value = v.Value,
                     SortOrder = v.SortOrder,
-                    Version= v.Version
+                    Version = v.Version
                 })
                 .ToList()
         };
@@ -78,10 +76,7 @@ public class AttributeService(ApplicationDbContext _db) : IAttributeService
     }
     public async Task<AttributeDto> UpdateAsync(UpdateAttributeDto dto, Guid id)
     {
-        var attribute = await _db.Attribute
-            .Include(a => a.Values)
-            .FirstOrDefaultAsync(a => a.Id == id);
-
+        var attribute = await _db.Attribute.Include(a => a.Values).FirstOrDefaultAsync(a => a.Id == id);
         if (attribute == null)
             throw new NotFoundException("Attribute not found.");
         if (attribute.Version != dto.Version)
@@ -107,8 +102,7 @@ public class AttributeService(ApplicationDbContext _db) : IAttributeService
             Description = attribute.Description,
             IsFilterable = attribute.IsFilterable,
             Version = attribute.Version,
-            Values = attribute.Values
-                .OrderBy(v => v.SortOrder)
+            Values = attribute.Values.OrderBy(v => v.SortOrder)
                 .Select(v => new AttributeValueDto
                 {
                     Id = v.Id,
@@ -120,10 +114,12 @@ public class AttributeService(ApplicationDbContext _db) : IAttributeService
     }
     public async Task DeleteAttribute(Guid id)
     {
-        var attribute = await _db.Attribute
-    .Include(a => a.Values)
-    .FirstOrDefaultAsync(a => a.Id == id);
-
+        var attribute = await _db.Attribute.Include(a => a.Values).FirstOrDefaultAsync(a => a.Id == id);
+        var isUsed = await _db.PositionsRequirement.AnyAsync(pr => pr.AttributeId == id);
+        if (isUsed)
+        {
+            throw new ConflictException("This attribute is used by one or more positions and cannot be deleted.");
+        }
         if (attribute == null)
             throw new KeyNotFoundException("Attribute not found.");
 

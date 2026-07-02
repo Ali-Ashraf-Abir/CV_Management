@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using backend.Data;
@@ -11,9 +12,11 @@ using backend.Data;
 namespace backend.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260701112812_AddedPositionTableAndDateTimeAndPositionRequirement")]
+    partial class AddedPositionTableAndDateTimeAndPositionRequirement
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -277,9 +280,9 @@ namespace backend.Migrations
             modelBuilder.Entity("backend.Models.Position", b =>
                 {
                     b.HasOne("backend.Models.User", "CreatedBy")
-                        .WithMany("Positions")
+                        .WithMany()
                         .HasForeignKey("CreatedById")
-                        .OnDelete(DeleteBehavior.Restrict)
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("CreatedBy");
@@ -288,9 +291,9 @@ namespace backend.Migrations
             modelBuilder.Entity("backend.Models.PositionRequirement", b =>
                 {
                     b.HasOne("backend.Models.Attribute", "Attribute")
-                        .WithMany("PositionRequirements")
+                        .WithMany()
                         .HasForeignKey("AttributeId")
-                        .OnDelete(DeleteBehavior.Restrict)
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("backend.Models.Position", "Position")
@@ -317,8 +320,6 @@ namespace backend.Migrations
 
             modelBuilder.Entity("backend.Models.Attribute", b =>
                 {
-                    b.Navigation("PositionRequirements");
-
                     b.Navigation("Values");
                 });
 
@@ -329,8 +330,6 @@ namespace backend.Migrations
 
             modelBuilder.Entity("backend.Models.User", b =>
                 {
-                    b.Navigation("Positions");
-
                     b.Navigation("RefreshTokens");
                 });
 #pragma warning restore 612, 618

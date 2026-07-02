@@ -23,6 +23,7 @@ import { AttributeValueDto } from "@/types/attribute";
 interface AttributeValueTableProps {
   attributeId: string;
   values: AttributeValueDto[];
+  version:number;
   onChange: (values: AttributeValueDto[]) => void;
 }
 
@@ -34,7 +35,7 @@ export function AttributeValueTable({ attributeId, values, onChange }: Attribute
   const sorted = [...values].sort((a, b) => a.sortOrder - b.sortOrder);
   const nextSortOrder = sorted.length ? sorted[sorted.length - 1].sortOrder + 1 : 0;
 
-  async function handleSubmit(input: { value: string; sortOrder: number }) {
+  async function handleSubmit(input: { value: string; sortOrder: number,version:number }) {
     try {
       if (dialogValue) {
         const updated = await attributeValuesApi.update(attributeId, dialogValue.id, input);
