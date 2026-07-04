@@ -15,6 +15,11 @@ import { CandidateProfileValues } from "./candidate-position-cv";
 import { formatRequirementRule } from "@/lib/utils/requirement-format";
 
 import { FormControl, FormField, FormItem, FormLabel, FormMessage } from "../ui/form";
+import { useEffect, useState } from "react";
+import { AttributeDto } from "@/types/attribute";
+import { attributesApi } from "@/lib/api/attributes";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "../ui/select";
+
 
 export function AttributeValueField({
   control,
@@ -64,6 +69,13 @@ function FieldControl({
   value: string;
   onChange: (v: string) => void;
 }) {
+  const [attributeDropdowns, setAttributeDropdowns] = useState<AttributeDto>()
+  useEffect(() => {
+    if (requirement.attributeType == 'Dropdown') {
+      attributesApi.getById(requirement.attributeId).then(setAttributeDropdowns)
+    }
+  }, [requirement])
+  console.log(attributeDropdowns)
   switch (requirement.attributeType) {
     case "Numeric":
       return (
@@ -98,10 +110,29 @@ function FieldControl({
         />
       );
     case "Dropdown":
-      // Requirement rows don't carry the attribute's option list, so we fall
-      // back to free text here. Wire this to attributesApi.getById(requirement.attributeId)
-      // once you want a real <Select> of valid options for candidates.
-      return <Input value={value} onChange={(e) => onChange(e.target.value)} />;
+
+      return attributeDropdowns && <Select value={value} onValueChange={onChange}>
+        <FormControl>
+          <SelectTrigger className="w-full">
+            <SelectValue placeholder="Choose an attribute" />
+          </SelectTrigger>
+        </FormControl>
+        <SelectContent>
+          {requirement === null && (
+            <div className="px-2 py-1.5 text-sm text-muted-foreground">Loading...</div>
+          )}
+          {requirement !== null && attributeDropdowns.values.length === 0 && (
+            <div className="px-2 py-1.5 text-sm text-muted-foreground">
+              No more filterable attributes available.
+            </div>
+          )}
+          {attributeDropdowns.values.map((a) => (
+            <SelectItem key={a.id} value={a.id}>
+              {a.value}
+            </SelectItem>
+          ))}
+        </SelectContent>
+      </Select>
     default:
       return <Input value={value} onChange={(e) => onChange(e.target.value)} />;
   }

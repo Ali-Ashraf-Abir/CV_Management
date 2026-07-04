@@ -50,7 +50,7 @@ export function CandidatePositionsPage() {
         )}
 
         {positions?.map((position) => (
-          <Link key={position.id} href={`/positions/${position.id}`}>
+          <Link key={position.id} href={`/jobs/${position.id}`}>
             <Card className="transition-colors hover:border-foreground/20">
               <CardContent className="flex items-center justify-between gap-4 py-4">
                 <div className="min-w-0">

@@ -1,16 +1,22 @@
-import { getTranslations } from "next-intl/server";
-import { LoginForm } from "@/components/auth/login-form";
-import { Briefcase } from "lucide-react";
-import { ProtectedRoute } from "@/guards/ProtectedRoutes";
+"use client";
 
-export default async function LoginPage() {
-  const t = await getTranslations("login");
+import { CandidatePositionsPage } from "@/components/candidate/candidate-positions-page";
+import { Skeleton } from "@/components/ui/skeleton";
+import { useAuth } from "@/hooks/useAuth";
 
-  return (
-    <ProtectedRoute>
-      <div className="flex min-h-[calc(100vh-4rem)] items-center justify-center px-4 py-12 bg-accent">
-        <h1 className="">this is an authenticated page</h1>
+
+export default function JobsPage() {
+  const { isLoading } = useAuth();
+
+  if (isLoading) {
+    return (
+      <div className="mx-auto max-w-3xl space-y-4 px-4 py-8 sm:px-6">
+        <Skeleton className="h-8 w-48" />
+        <Skeleton className="h-24 w-full" />
+        <Skeleton className="h-24 w-full" />
       </div>
-    </ProtectedRoute>
-  );
+    );
+  }
+
+  return <CandidatePositionsPage />;
 }

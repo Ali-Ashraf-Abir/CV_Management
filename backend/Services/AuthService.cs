@@ -39,8 +39,9 @@ public class AuthService(ApplicationDbContext _db, IPasswordHasher<User> passwor
         {
             _db.Users.Add(user);
             await _db.SaveChangesAsync();
+           
             return new ResponseRegisterDto
-            {
+            {   Id = user.Id,
                 FirstName = user.FirstName,
                 LastName = user.LastName,
                 Email = user.Email,

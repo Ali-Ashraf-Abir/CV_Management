@@ -10,12 +10,13 @@ using Microsoft.AspNetCore.Mvc;
 [ApiController]
 [Route("api/auth")]
 
-public class AuthRoutes(IAuthService authService) : ControllerBase
+public class AuthRoutes(IAuthService authService,ICVService cvService) : ControllerBase
 {
     [HttpPost("register")]
     public async Task<IActionResult> RegisterUser(RegisterDto data)
     {
         var user = await authService.RegisterUser(data);
+        await cvService.CreateCVAsync(user.Id);
         return Ok(user);
     }
 

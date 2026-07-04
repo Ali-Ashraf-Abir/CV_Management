@@ -98,11 +98,11 @@ export function CandidatePositionCv({ positionId }: { positionId: string }) {
   return (
     <div className="mx-auto max-w-3xl px-4 py-8 sm:px-6">
       <Link
-        href="/positions"
+        href="/jobs"
         className="mb-4 inline-flex items-center gap-1 text-sm text-muted-foreground hover:text-foreground"
       >
         <ArrowLeft className="size-4" />
-        Back to positions
+        Back to jobs
       </Link>
 
       {/* CV header */}

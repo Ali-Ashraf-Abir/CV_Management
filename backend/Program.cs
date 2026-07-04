@@ -43,6 +43,8 @@ builder.Services.AddScoped<IUserService,UserService>();
 builder.Services.AddScoped<IAttributeService,AttributeService>();
 builder.Services.AddScoped<IAttributeValueService,AttributeValueService>();
 builder.Services.AddScoped<IPositionService,PositionService>();
+builder.Services.AddScoped<ICVService,CVService>();
+builder.Services.AddScoped<ICVAttributeService,CVAttributeService>();
 builder.Services.AddScoped<IPositionRequirementService,PositionsRequirementService>();
 // jwt setting
 builder.Services.AddJwtAuthentication(builder.Configuration);
