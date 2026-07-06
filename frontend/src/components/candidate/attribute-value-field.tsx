@@ -20,15 +20,18 @@ import { AttributeDto } from "@/types/attribute";
 import { attributesApi } from "@/lib/api/attributes";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "../ui/select";
 
-
 export function AttributeValueField({
   control,
   requirement,
   isPrefilled,
+  staleValue,
+  dropdownAttribute,
 }: {
   control: Control<CandidateProfileValues>;
   requirement: PositionRequirementDto;
   isPrefilled?: boolean;
+  staleValue?: string;
+  dropdownAttribute?: AttributeDto;
 }) {
   const name = `values.${requirement.id}` as const;
 
@@ -48,8 +51,13 @@ export function AttributeValueField({
             )}
           </div>
           <FormControl>
-            <FieldControl requirement={requirement} value={field.value} onChange={field.onChange} />
+            <FieldControl requirement={requirement} value={field.value} onChange={field.onChange} dropdownAttribute={dropdownAttribute} />
           </FormControl>
+          {staleValue && (
+            <p className="text-xs text-amber-500">
+              Your profile previously had "{staleValue}" — that option isn't available anymore, please choose again.
+            </p>
+          )}
           <p className="text-xs text-muted-foreground">
             Requirement: {formatRequirementRule(requirement)}
           </p>
@@ -64,18 +72,13 @@ function FieldControl({
   requirement,
   value,
   onChange,
+  dropdownAttribute,
 }: {
   requirement: PositionRequirementDto;
   value: string;
   onChange: (v: string) => void;
+  dropdownAttribute?: AttributeDto;
 }) {
-  const [attributeDropdowns, setAttributeDropdowns] = useState<AttributeDto>()
-  useEffect(() => {
-    if (requirement.attributeType == 'Dropdown') {
-      attributesApi.getById(requirement.attributeId).then(setAttributeDropdowns)
-    }
-  }, [requirement])
-  console.log(attributeDropdowns)
   switch (requirement.attributeType) {
     case "Numeric":
       return (
@@ -109,30 +112,31 @@ function FieldControl({
           className="min-h-24 resize-y"
         />
       );
-    case "Dropdown":
-
-      return attributeDropdowns && <Select value={value} onValueChange={onChange}>
-        <FormControl>
-          <SelectTrigger className="w-full">
-            <SelectValue placeholder="Choose an attribute" />
-          </SelectTrigger>
-        </FormControl>
-        <SelectContent>
-          {requirement === null && (
-            <div className="px-2 py-1.5 text-sm text-muted-foreground">Loading...</div>
-          )}
-          {requirement !== null && attributeDropdowns.values.length === 0 && (
-            <div className="px-2 py-1.5 text-sm text-muted-foreground">
-              No more filterable attributes available.
-            </div>
-          )}
-          {attributeDropdowns.values.map((a) => (
-            <SelectItem key={a.id} value={a.id}>
-              {a.value}
-            </SelectItem>
-          ))}
-        </SelectContent>
-      </Select>
+     case "Dropdown":
+      return (
+        <Select value={value} onValueChange={onChange}>
+          <FormControl>
+            <SelectTrigger className="w-full">
+              <SelectValue placeholder="Choose an option" />
+            </SelectTrigger>
+          </FormControl>
+          <SelectContent>
+            {!dropdownAttribute && (
+              <div className="px-2 py-1.5 text-sm text-muted-foreground">Loading...</div>
+            )}
+            {dropdownAttribute && dropdownAttribute.values.length === 0 && (
+              <div className="px-2 py-1.5 text-sm text-muted-foreground">
+                No options available.
+              </div>
+            )}
+            {dropdownAttribute?.values.map((a) => (
+              <SelectItem key={a.id} value={a.id}>
+                {a.value}
+              </SelectItem>
+            ))}
+          </SelectContent>
+        </Select>
+      );
     default:
       return <Input value={value} onChange={(e) => onChange(e.target.value)} />;
   }
