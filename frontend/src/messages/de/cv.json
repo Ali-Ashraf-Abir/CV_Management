@@ -1,0 +1,22 @@
+{
+  "backToJobs": "Zurück zu den Stellen",
+  "noRequirements": "Für diese Stelle wurden noch keine Anforderungen festgelegt — schau später noch einmal vorbei.",
+  "applyBy": "Bewerbungsfrist: {date}",
+  "profileTitle": "Dein Profil für diese Stelle",
+  "profileDescription": "Alles, was bereits in deinem Lebenslauf steht, ist unten automatisch ausgefüllt. Ergänze den Rest — er wird für nächstes Mal in deinem Lebenslauf gespeichert.",
+  "answeredCount": "von {total} beantwortet",
+  "allSet": "Alles erledigt — alle Felder sind ausgefüllt.",
+  "fieldsLeft": "{count, plural, one {# Feld übrig} other {# Felder übrig}}",
+  "saveButton": "Angaben speichern",
+  "saveSuccessTitle": "Deine Angaben wurden in deinem Profil gespeichert",
+  "saveSuccessDescription": "Sie werden bei anderen Stellen automatisch vorausgefüllt.",
+  "saveErrorFallback": "Deine Angaben konnten nicht gespeichert werden",
+  "loadErrorFallback": "Diese Stelle konnte nicht geladen werden",
+  "fromProfile": "Aus deinem Profil",
+  "staleValueWarning": "In deinem Profil stand hier „{value}“, aber diese Option ist nicht mehr verfügbar — bitte wähle erneut.",
+  "chooseOption": "Option auswählen",
+  "yes": "Ja",
+  "no": "Nein",
+  "loadingOptions": "Wird geladen...",
+  "noOptionsAvailable": "Keine Optionen verfügbar."
+}

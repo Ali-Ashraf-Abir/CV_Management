@@ -12,10 +12,9 @@ function formatSingleValue(type: AttributeType, value: string): string {
   return value;
 }
 
-/** e.g. "≥ 3", "between Jan 2020 and Jan 2023", "one of: Remote, Hybrid" */
 export function formatRequirementRule(requirement: PositionRequirementDto): string {
   const { operator, value, secondValue, attributeType } = requirement;
-  if (!value) return "—";
+  if (!value) return "";
 
   if (operator === "In") {
     const options = value

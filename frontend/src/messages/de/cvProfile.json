@@ -1,0 +1,11 @@
+{
+  "title": "Dein Lebenslauf",
+  "subtitle": "Diese Angaben werden für jede Bewerbung wiederverwendet — trage sie hier einmal ein oder beim ersten Mal, wenn eine Stelle danach fragt.",
+  "summary": "{count, plural, one {# Angabe} other {# Angaben}} gespeichert in {categories, plural, one {# Kategorie} other {# Kategorien}}",
+  "emptyTitle": "Noch nichts hier",
+  "emptyDescription": "Du hast noch nichts hinzugefügt. Bewirb dich auf eine Stelle oder fülle dein Profil aus, um loszulegen.",
+  "removeLabel": "{title} entfernen",
+  "removeSuccess": "Aus deinem Lebenslauf entfernt",
+  "removeErrorFallback": "Konnte nicht entfernt werden",
+  "loadErrorFallback": "Dein Lebenslauf konnte nicht geladen werden"
+}

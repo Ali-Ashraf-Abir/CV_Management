@@ -1,8 +1,8 @@
 "use client";
 
 import { Control } from "react-hook-form";
-import { Sparkles } from "lucide-react";
-
+import { AlertTriangle, Sparkles } from "lucide-react";
+import { useTranslations } from "next-intl";
 
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
@@ -15,9 +15,7 @@ import { CandidateProfileValues } from "./candidate-position-cv";
 import { formatRequirementRule } from "@/lib/utils/requirement-format";
 
 import { FormControl, FormField, FormItem, FormLabel, FormMessage } from "../ui/form";
-import { useEffect, useState } from "react";
 import { AttributeDto } from "@/types/attribute";
-import { attributesApi } from "@/lib/api/attributes";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "../ui/select";
 
 export function AttributeValueField({
@@ -33,7 +31,9 @@ export function AttributeValueField({
   staleValue?: string;
   dropdownAttribute?: AttributeDto;
 }) {
+  const t = useTranslations("cv");
   const name = `values.${requirement.id}` as const;
+  const rule = formatRequirementRule(requirement);
 
   return (
     <FormField
@@ -41,26 +41,38 @@ export function AttributeValueField({
       name={name}
       render={({ field }) => (
         <FormItem>
-          <div className="flex items-center justify-between gap-2">
-            <FormLabel>{requirement.attributeTitle}</FormLabel>
-            {isPrefilled && (
-              <Badge variant="secondary" className="gap-1 font-normal">
+          <div className="flex items-baseline justify-between gap-2">
+            <FormLabel className="text-sm font-medium text-foreground">
+              {requirement.attributeTitle}
+            </FormLabel>
+            {isPrefilled && !staleValue && (
+              <Badge
+                variant="secondary"
+                className="gap-1 whitespace-nowrap bg-primary/10 font-normal text-primary hover:bg-primary/10"
+              >
                 <Sparkles className="size-3" />
-                From your profile
+                {t("fromProfile")}
               </Badge>
             )}
           </div>
+
           <FormControl>
-            <FieldControl requirement={requirement} value={field.value} onChange={field.onChange} dropdownAttribute={dropdownAttribute} />
+            <FieldControl
+              requirement={requirement}
+              value={field.value}
+              onChange={field.onChange}
+              dropdownAttribute={dropdownAttribute}
+            />
           </FormControl>
+
           {staleValue && (
-            <p className="text-xs text-amber-500">
-              Your profile previously had "{staleValue}" — that option isn't available anymore, please choose again.
-            </p>
+            <div className="flex items-start gap-1.5 rounded-md border border-amber-200 bg-amber-50 px-2.5 py-1.5 text-xs text-amber-800 dark:border-amber-900/50 dark:bg-amber-950/30 dark:text-amber-400">
+              <AlertTriangle className="mt-0.5 size-3 shrink-0" />
+              <span>{t("staleValueWarning", { value: staleValue })}</span>
+            </div>
           )}
-          <p className="text-xs text-muted-foreground">
-            Requirement: {formatRequirementRule(requirement)}
-          </p>
+
+          {rule && <p className="text-xs text-muted-foreground">{rule}</p>}
           <FormMessage />
         </FormItem>
       )}
@@ -79,6 +91,8 @@ function FieldControl({
   onChange: (v: string) => void;
   dropdownAttribute?: AttributeDto;
 }) {
+  const t = useTranslations("cv");
+
   switch (requirement.attributeType) {
     case "Numeric":
       return (
@@ -100,8 +114,12 @@ function FieldControl({
           onValueChange={(v) => v && onChange(v)}
           className="justify-start"
         >
-          <ToggleGroupItem value="true">Yes</ToggleGroupItem>
-          <ToggleGroupItem value="false">No</ToggleGroupItem>
+          <ToggleGroupItem value="true" className="min-w-20">
+            {t("yes")}
+          </ToggleGroupItem>
+          <ToggleGroupItem value="false" className="min-w-20">
+            {t("no")}
+          </ToggleGroupItem>
         </ToggleGroup>
       );
     case "Text":
@@ -112,21 +130,23 @@ function FieldControl({
           className="min-h-24 resize-y"
         />
       );
-     case "Dropdown":
+    case "Dropdown":
       return (
         <Select value={value} onValueChange={onChange}>
           <FormControl>
             <SelectTrigger className="w-full">
-              <SelectValue placeholder="Choose an option" />
+              <SelectValue placeholder={t("chooseOption")} />
             </SelectTrigger>
           </FormControl>
           <SelectContent>
             {!dropdownAttribute && (
-              <div className="px-2 py-1.5 text-sm text-muted-foreground">Loading...</div>
+              <div className="px-2 py-1.5 text-sm text-muted-foreground">
+                {t("loadingOptions")}
+              </div>
             )}
             {dropdownAttribute && dropdownAttribute.values.length === 0 && (
               <div className="px-2 py-1.5 text-sm text-muted-foreground">
-                No options available.
+                {t("noOptionsAvailable")}
               </div>
             )}
             {dropdownAttribute?.values.map((a) => (

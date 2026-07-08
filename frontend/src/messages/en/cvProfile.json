@@ -1,0 +1,11 @@
+{
+  "title": "Your CV",
+  "subtitle": "These values are shared across every job you apply to — fill them in once here or the first time a job asks for them.",
+  "summary": "{count, plural, one {# detail} other {# details}} saved across {categories, plural, one {# category} other {# categories}}",
+  "emptyTitle": "Nothing here yet",
+  "emptyDescription": "You haven't added anything yet. Apply to a job or fill in your profile to get started.",
+  "removeLabel": "Remove {title}",
+  "removeSuccess": "Removed from your CV",
+  "removeErrorFallback": "Couldn't remove this",
+  "loadErrorFallback": "Couldn't load your CV"
+}

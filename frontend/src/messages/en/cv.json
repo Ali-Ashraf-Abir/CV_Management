@@ -1,0 +1,22 @@
+{
+  "backToJobs": "Back to jobs",
+  "noRequirements": "This position has no requirements defined yet — check back soon.",
+  "applyBy": "Apply by {date}",
+  "profileTitle": "Your profile for this role",
+  "profileDescription": "Anything already on your CV is filled in below. Fill in the rest — it's saved to your CV for next time.",
+  "answeredCount": "of {total} answered",
+  "allSet": "All set — everything is filled in.",
+  "fieldsLeft": "{count, plural, one {# field left} other {# fields left}}",
+  "saveButton": "Save my details",
+  "saveSuccessTitle": "Your details are saved to your profile",
+  "saveSuccessDescription": "These will be prefilled automatically on other jobs too.",
+  "saveErrorFallback": "Couldn't save your details",
+  "loadErrorFallback": "Couldn't load this position",
+  "fromProfile": "From your profile",
+  "staleValueWarning": "Your profile had \"{value}\" here, but that option isn't available anymore — please choose again.",
+  "chooseOption": "Choose an option",
+  "yes": "Yes",
+  "no": "No",
+  "loadingOptions": "Loading...",
+  "noOptionsAvailable": "No options available."
+}
