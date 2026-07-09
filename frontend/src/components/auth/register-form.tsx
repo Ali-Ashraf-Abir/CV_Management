@@ -1,13 +1,13 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useRef } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useLocale, useTranslations } from "next-intl";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
-import { Eye, EyeOff, Loader2, UserRound, BriefcaseBusiness } from "lucide-react";
+import { Eye, EyeOff, Loader2, UserRound, BriefcaseBusiness, Camera, X } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { FormField } from "@/components/ui/form-field";
@@ -18,7 +18,6 @@ import { useRegisterSchema } from "@/validations/registration.schema";
 
 type Role = "Candidate" | "Recruiter";
 
-
 type RegisterFormValues = {
   firstName: string;
   lastName: string;
@@ -28,6 +27,8 @@ type RegisterFormValues = {
   role: Role;
 };
 
+const MAX_IMAGE_SIZE = 5 * 1024 * 1024; // 5MB, matches backend limit
+
 export function RegisterForm() {
   const t = useTranslations("register");
   const locale = useLocale();
@@ -36,6 +37,11 @@ export function RegisterForm() {
   const [showPass, setShowPass] = useState(false);
   const [showConfirm, setShowConfirm] = useState(false);
   const [serverError, setServerError] = useState<string | null>(null);
+
+  const [profileImage, setProfileImage] = useState<File | null>(null);
+  const [previewUrl, setPreviewUrl] = useState<string | null>(null);
+  const [imageError, setImageError] = useState<string | null>(null);
+  const fileInputRef = useRef<HTMLInputElement>(null);
 
   const {
     register,
@@ -57,20 +63,49 @@ export function RegisterForm() {
 
   const selectedRole = watch("role");
 
+  function handleImageSelect(e: React.ChangeEvent<HTMLInputElement>) {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    setImageError(null);
+
+    if (!file.type.startsWith("image/")) {
+      setImageError(t("imageInvalidType"));
+      return;
+    }
+    if (file.size > MAX_IMAGE_SIZE) {
+      setImageError(t("imageTooLarge"));
+      return;
+    }
+
+    setProfileImage(file);
+    setPreviewUrl(URL.createObjectURL(file));
+  }
+
+  function clearImage() {
+    setProfileImage(null);
+    if (previewUrl) URL.revokeObjectURL(previewUrl);
+    setPreviewUrl(null);
+    setImageError(null);
+    if (fileInputRef.current) fileInputRef.current.value = "";
+  }
+
   async function onSubmit(data: RegisterFormValues) {
-    console.log("Submitting", data);
     setServerError(null);
     try {
-      await registerUser({
-        firstName: data.firstName,
-        lastName: data.lastName,
-        email: data.email,
-        password: data.password,
-        role: data.role,
-      });
+      const formData = new FormData();
+      formData.append("firstName", data.firstName);
+      formData.append("lastName", data.lastName);
+      formData.append("email", data.email);
+      formData.append("password", data.password);
+      formData.append("role", data.role);
+      if (profileImage) {
+        formData.append("profileImage", profileImage);
+      }
+
+      await registerUser(formData);
       toast.success("Registration Successful Please Login");
       router.push(`/${locale}/login`);
-
     } catch (err) {
       console.error(err);
       setServerError("Something went wrong");
@@ -85,7 +120,42 @@ export function RegisterForm() {
         </div>
       )}
 
-      {/* Role selector */}
+      {/* Profile image */}
+      <div className="flex flex-col items-center gap-2">
+        <div className="relative">
+          <button
+            type="button"
+            onClick={() => fileInputRef.current?.click()}
+            className="flex h-20 w-20 items-center justify-center overflow-hidden rounded-full border-2 border-dashed border-border bg-accent text-muted-foreground transition-colors hover:border-primary hover:text-primary"
+          >
+            {previewUrl ? (
+
+              <img src={previewUrl} alt="Profile preview" className="h-full w-full object-cover" />
+            ) : (
+              <Camera className="h-6 w-6" />
+            )}
+          </button>
+          {previewUrl && (
+            <button
+              type="button"
+              onClick={clearImage}
+              className="absolute -right-1 -top-1 flex h-6 w-6 items-center justify-center rounded-full bg-destructive text-destructive-foreground shadow-sm hover:bg-destructive/90"
+            >
+              <X className="h-3.5 w-3.5" />
+            </button>
+          )}
+        </div>
+        <input
+          ref={fileInputRef}
+          type="file"
+          accept="image/*"
+          onChange={handleImageSelect}
+          className="hidden"
+        />
+        <span className="text-xs text-muted-foreground">{t("profileImageOptional")}</span>
+        {imageError && <p className="text-xs text-destructive">{imageError}</p>}
+      </div>
+
       <div className="flex flex-col gap-1.5">
         <span className="text-sm font-medium text-foreground">{t("role")}</span>
         <div className="grid grid-cols-2 gap-3">
@@ -115,7 +185,6 @@ export function RegisterForm() {
         )}
       </div>
 
-      {/* Name row */}
       <div className="grid grid-cols-2 gap-3">
         <FormField label={t("firstName")} error={errors.firstName?.message} required>
           <Input

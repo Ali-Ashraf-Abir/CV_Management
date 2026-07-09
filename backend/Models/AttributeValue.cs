@@ -8,7 +8,6 @@ public class AttributeValue
     public string Value { get; set; } = string.Empty;
     public int SortOrder { get; set; }
     public int Version {get;set;}
-
     public DateTime CreatedAt{get;set;}
     public DateTime UpdatedAt{get;set;}
 }

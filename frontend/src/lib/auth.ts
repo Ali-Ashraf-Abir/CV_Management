@@ -26,8 +26,12 @@ export interface RegisterResponse {
   email: string;
 }
 
-export async function registerUser(data: RegisterPayload) {
-  const res = await api.post<RegisterResponse>("/auth/register", data);
+export async function registerUser(data: FormData) {
+  const res = await api.post<RegisterResponse>("/auth/register", data, {
+    headers: {
+      "Content-Type": "multipart/form-data",
+    },
+  });
   return res.data;
 }
 

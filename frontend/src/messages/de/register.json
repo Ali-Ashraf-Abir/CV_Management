@@ -7,6 +7,7 @@
   "lastNamePlaceholder": "Müller",
   "email": "E-Mail-Adresse",
   "emailPlaceholder": "sie@beispiel.de",
+  "profileImageOptional":"Profilbild hochladen (optional)",
   "password": "Passwort",
   "passwordPlaceholder": "Sicheres Passwort erstellen",
   "confirmPassword": "Passwort bestätigen",

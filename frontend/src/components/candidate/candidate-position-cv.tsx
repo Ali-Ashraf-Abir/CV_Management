@@ -164,6 +164,7 @@ export function CandidatePositionCv({ positionId }: { positionId: string }) {
     const upserts = requirements
       .map((r) => ({ requirement: r, value: values.values[r.id] }))
       .filter(({ value }) => value !== "" && value != null)
+      .filter(({ requirement }) => requirement.attributeType !== "Image")
       .map(({ requirement, value }) => {
         if (requirement.attributeType === "Dropdown") {
           const label = dropdownAttributes[requirement.attributeId]?.values.find(

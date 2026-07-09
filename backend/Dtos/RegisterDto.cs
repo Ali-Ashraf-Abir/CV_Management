@@ -12,5 +12,6 @@ public class RegisterDto
     public string Password { get; set; } = "";
 
     public Roles Role{get;set;}
+    public IFormFile? ProfileImage { get; set; }
 
 }

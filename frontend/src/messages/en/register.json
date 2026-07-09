@@ -10,6 +10,7 @@
   "password": "Password",
   "passwordPlaceholder": "Create a strong password",
   "confirmPassword": "Confirm password",
+  "profileImageOptional":"Upload Profile Image (Optional)",
   "confirmPasswordPlaceholder": "Repeat your password",
   "role": "I am a",
   "roleCandidate": "Candidate",

@@ -17,6 +17,7 @@ import { formatRequirementRule } from "@/lib/utils/requirement-format";
 import { FormControl, FormField, FormItem, FormLabel, FormMessage } from "../ui/form";
 import { AttributeDto } from "@/types/attribute";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "../ui/select";
+import { ImageAttributeField } from "./image-attribute-field";
 
 export function AttributeValueField({
   control,
@@ -94,6 +95,14 @@ function FieldControl({
   const t = useTranslations("cv");
 
   switch (requirement.attributeType) {
+    case "Image":
+      return (
+        <ImageAttributeField
+          attributeId={requirement.attributeId}
+          value={value}
+          onChange={onChange}
+        />
+      );
     case "Numeric":
       return (
         <Input

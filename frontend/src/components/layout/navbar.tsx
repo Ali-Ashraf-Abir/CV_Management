@@ -90,6 +90,7 @@ export function Navbar() {
             {isAuthenticated ? (
               <div className="flex gap-5 items-center justify-center">
                 <span>{user?.firstName}</span>
+                {user?.photoUrl && <img src={user?.photoUrl} className="h-10 w-10 rounded-full object-cover"/>}
                 <Button onClick={logout}>Logout</Button>
               </div>
             ) : (

@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 using Npgsql;
 
-public class AuthService(ApplicationDbContext _db, IPasswordHasher<User> passwordHasher, IJwtService _jwtService, IRefreshTokenService _refreshTokenService) : IAuthService
+public class AuthService(ApplicationDbContext _db, IPasswordHasher<User> passwordHasher, IJwtService _jwtService, IRefreshTokenService _refreshTokenService, IImageService _imageService) : IAuthService
 {
 
     public async Task<ResponseRegisterDto> RegisterUser(RegisterDto dto)
@@ -32,23 +32,39 @@ public class AuthService(ApplicationDbContext _db, IPasswordHasher<User> passwor
             CreatedAt = DateTime.UtcNow,
             UpdatedAt = DateTime.UtcNow
         };
-
+        ImageUploadResultDto? image = null;
+        if (dto.ProfileImage != null)
+        {
+            image = await _imageService.UploadImageAsync(dto.ProfileImage);
+        }
         user.PasswordHash = passwordHasher.HashPassword(user, dto.Password);
+        if (image != null)
+        {
 
+            user.PhotoUrl = image.Url;
+            user.PhotoUrlPublicId = image.PublicId;
+        }
         try
         {
             _db.Users.Add(user);
             await _db.SaveChangesAsync();
-           
+
             return new ResponseRegisterDto
-            {   Id = user.Id,
+            {
+                Id = user.Id,
                 FirstName = user.FirstName,
                 LastName = user.LastName,
                 Email = user.Email,
+                PhotoUrl = image?.Url,
+                PhotoUrlPublicId = image?.PublicId,
             };
         }
         catch (DbUpdateException ex)
         {
+            if (image != null)
+            {
+                await _imageService.DeleteImageAsync(image.PublicId);
+            }
             if (ex.InnerException is PostgresException pg && pg.SqlState == PostgresErrorCodes.UniqueViolation)
             {
                 throw new ConflictException("Email already exists.");

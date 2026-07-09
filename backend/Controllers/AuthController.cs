@@ -13,7 +13,7 @@ using Microsoft.AspNetCore.Mvc;
 public class AuthRoutes(IAuthService authService,ICVService cvService) : ControllerBase
 {
     [HttpPost("register")]
-    public async Task<IActionResult> RegisterUser(RegisterDto data)
+    public async Task<IActionResult> Register([FromForm] RegisterDto data)
     {
         var user = await authService.RegisterUser(data);
         await cvService.CreateCVAsync(user.Id);

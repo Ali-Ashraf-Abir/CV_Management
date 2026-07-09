@@ -7,6 +7,7 @@ public class CVAttributes
     public Guid AttributeId{get;set;}
     public string? AttributeValue{get;set;}
     public Guid? AttributeValueId{get;set;}
+    public string PhotoUrlPublicId{get;set;}=string.Empty;
     public int Version{get;set;}
     public DateTime CreatedAt{get;set;}
     public DateTime UpdatedAt{get;set;}

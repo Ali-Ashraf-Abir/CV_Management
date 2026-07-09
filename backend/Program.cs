@@ -7,9 +7,11 @@ using backend.Middleware;
 using backend.Models;
 using backend.Services;
 using backend.Services.Interfaces;
+using CloudinaryDotNet;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -44,8 +46,20 @@ builder.Services.AddScoped<IAttributeService,AttributeService>();
 builder.Services.AddScoped<IAttributeValueService,AttributeValueService>();
 builder.Services.AddScoped<IPositionService,PositionService>();
 builder.Services.AddScoped<ICVService,CVService>();
+builder.Services.AddScoped<ICVImageService,CVImageService>();
 builder.Services.AddScoped<ICVAttributeService,CVAttributeService>();
 builder.Services.AddScoped<IPositionRequirementService,PositionsRequirementService>();
+builder.Services.Configure<CloudinaryOptions>(builder.Configuration.GetSection("Cloudinary"));
+builder.Services.AddSingleton(sp =>
+{
+    var options = sp.GetRequiredService<IOptions<CloudinaryOptions>>().Value;
+    var account = new Account(
+        options.CloudName,
+        options.ApiKey,
+        options.ApiSecret);
+    return new Cloudinary(account);
+});
+builder.Services.AddScoped<IImageService, ImageService>();
 // jwt setting
 builder.Services.AddJwtAuthentication(builder.Configuration);
 

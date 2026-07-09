@@ -12,6 +12,7 @@ public class User
     public Roles Role { get; set; }
     public string PasswordHash { get; set; } = string.Empty;
     public string PhotoUrl { get; set; } = string.Empty;
+    public string PhotoUrlPublicId {get;set;}=string.Empty;
     public DateTime CreatedAt { get; set; }
     public DateTime UpdatedAt { get; set; }
     public ICollection<RefreshToken> RefreshTokens { get; set; } = new List<RefreshToken>();
