@@ -1,0 +1,53 @@
+{
+  "title": "Profil",
+  "subtitle": "Verwalte dein Foto, deine Angaben und dein Passwort.",
+  "photo": {
+    "heading": "Foto",
+    "hint": "PNG oder JPG, bis zu 5 MB.",
+    "change": "Foto ändern",
+    "remove": "Entfernen",
+    "uploading": "Wird hochgeladen…",
+    "removing": "Wird entfernt…"
+  },
+  "details": {
+    "heading": "Persönliche Angaben",
+    "firstName": "Vorname",
+    "lastName": "Nachname",
+    "email": "E-Mail",
+    "emailHint": "Wende dich an den Support, um deine E-Mail zu ändern.",
+    "role": "Rolle",
+    "save": "Änderungen speichern",
+    "saving": "Wird gespeichert…",
+    "saved": "Profil aktualisiert.",
+    "noChanges": "Es gibt noch nichts zu speichern."
+  },
+  "roles": {
+    "Candidate": "Kandidat:in",
+    "Recruiter": "Recruiter:in",
+    "Admin": "Admin"
+  },
+  "security": {
+    "heading": "Passwort",
+    "description": "Wähle ein neues Passwort. Du bleibst auf diesem Gerät angemeldet.",
+    "currentPassword": "Aktuelles Passwort",
+    "newPassword": "Neues Passwort",
+    "confirmNewPassword": "Neues Passwort bestätigen",
+    "submit": "Passwort ändern",
+    "submitting": "Wird geändert…",
+    "success": "Passwort geändert."
+  },
+  "validation": {
+    "firstNameRequired": "Gib einen Vornamen ein.",
+    "lastNameRequired": "Gib einen Nachnamen ein.",
+    "currentPasswordRequired": "Gib dein aktuelles Passwort ein.",
+    "newPasswordRequired": "Gib ein neues Passwort ein.",
+    "newPasswordMinLength": "Verwende mindestens 8 Zeichen.",
+    "passwordsMustMatch": "Die Passwörter stimmen nicht überein.",
+    "imageTooLarge": "Die Datei ist größer als 5 MB.",
+    "imageWrongType": "Wähle eine PNG- oder JPG-Datei."
+  },
+  "errors": {
+    "loadFailed": "Profil konnte nicht geladen werden. Lade die Seite neu.",
+    "genericFailed": "Etwas ist schiefgelaufen. Versuche es erneut."
+  }
+}

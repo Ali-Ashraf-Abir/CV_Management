@@ -1,24 +1,76 @@
 using backend.Data;
 using backend.Dtos;
+using backend.Enums;
 using backend.Exceptions;
 using backend.Services.Interfaces;
 using Microsoft.EntityFrameworkCore;
 
 namespace backend.Services;
 
-
 public class AttributeService(ApplicationDbContext _db) : IAttributeService
 {
-    public async Task<List<AttributeListDto>> GetAllAttributeAsync()
+    public async Task<PagedResultDto<AttributeListDto>> GetAllAttributeAsync(
+        string? search, string? category, int page, int pageSize)
     {
-        return await _db.Attribute.Select(a => new AttributeListDto
+        page = page < 1 ? 1 : page;
+        pageSize = pageSize is < 1 or > 100 ? 20 : pageSize;
+
+        var query = _db.Attribute.AsQueryable();
+
+        if (!string.IsNullOrWhiteSpace(category) && category != "all")
         {
-            Id = a.Id,
-            Title = a.Title,
-            Category = a.Category,
-            Type = a.Type,
-        })
-        .ToListAsync();
+            if (!Enum.TryParse<AttributeCategory>(category, ignoreCase: true, out var categoryEnum))
+            {
+                throw new BadRequestException($"Invalid category '{category}'.");
+            }
+            query = query.Where(a => a.Category == categoryEnum);
+        }
+
+        if (!string.IsNullOrWhiteSpace(search))
+        {
+            query = query
+                .Where(a => a.SearchVector.Matches(EF.Functions.WebSearchToTsQuery("english", search)))
+                .OrderByDescending(a => a.SearchVector.Rank(EF.Functions.WebSearchToTsQuery("english", search)));
+        }
+        else
+        {
+            query = query.OrderBy(a => a.Title);
+        }
+
+        var totalCount = await query.CountAsync();
+
+        var items = await query
+            .Skip((page - 1) * pageSize)
+            .Take(pageSize)
+            .Select(a => new AttributeListDto
+            {
+                Id = a.Id,
+                Title = a.Title,
+                Category = a.Category,
+                Type = a.Type,
+            })
+            .ToListAsync();
+
+        return new PagedResultDto<AttributeListDto>
+        {
+            Items = items,
+            TotalCount = totalCount,
+            Page = page,
+            PageSize = pageSize
+        };
+    }
+
+    public async Task<List<string>> GetCategoriesAsync()
+    {
+        var categories = await _db.Attribute
+            .Select(a => a.Category)
+            .Distinct()
+            .ToListAsync();
+
+        return categories
+            .Select(c => c.ToString())
+            .OrderBy(c => c)
+            .ToList();
     }
 
     public async Task<AttributeDto> GetByIdAsync(Guid id)
@@ -49,6 +101,7 @@ public class AttributeService(ApplicationDbContext _db) : IAttributeService
                 .ToList()
         };
     }
+
     public async Task<AttributeDto> CreateAsync(CreateAttributeDto dto)
     {
         var attribute = new Models.Attribute
@@ -74,6 +127,7 @@ public class AttributeService(ApplicationDbContext _db) : IAttributeService
             Values = []
         };
     }
+
     public async Task<AttributeDto> UpdateAsync(UpdateAttributeDto dto, Guid id)
     {
         var attribute = await _db.Attribute.Include(a => a.Values).FirstOrDefaultAsync(a => a.Id == id);
@@ -112,6 +166,7 @@ public class AttributeService(ApplicationDbContext _db) : IAttributeService
                 .ToList()
         };
     }
+
     public async Task DeleteAttribute(Guid id)
     {
         var attribute = await _db.Attribute.Include(a => a.Values).FirstOrDefaultAsync(a => a.Id == id);
@@ -124,7 +179,31 @@ public class AttributeService(ApplicationDbContext _db) : IAttributeService
             throw new KeyNotFoundException("Attribute not found.");
 
         _db.Attribute.Remove(attribute);
+        await _db.SaveChangesAsync();
+    }
 
+    public async Task DeleteAttributes(List<Guid> ids)
+    {
+        if (ids == null || ids.Count == 0)
+            throw new KeyNotFoundException("No attribute ids provided.");
+
+        var attributes = await _db.Attribute.Where(a => ids.Contains(a.Id)).ToListAsync();
+        if (attributes.Count == 0)
+            throw new KeyNotFoundException("Attributes not found.");
+
+        var usedIds = await _db.PositionsRequirement
+            .Where(pr => ids.Contains(pr.AttributeId))
+            .Select(pr => pr.AttributeId)
+            .Distinct()
+            .ToListAsync();
+
+        if (usedIds.Count > 0)
+        {
+            throw new ConflictException(
+                "One or more selected attributes are used by positions and cannot be deleted.");
+        }
+
+        _db.Attribute.RemoveRange(attributes);
         await _db.SaveChangesAsync();
     }
 }

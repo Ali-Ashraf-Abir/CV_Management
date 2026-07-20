@@ -21,6 +21,12 @@ public class ApplicationDbContext : DbContext
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         base.OnModelCreating(modelBuilder);
+        modelBuilder.Entity<Models.Attribute>(entity =>{entity.HasGeneratedTsVectorColumn(
+            a => a.SearchVector,
+            "english",
+            a => new { a.Title, a.Description })
+          .HasIndex(a => a.SearchVector)
+          .HasMethod("GIN");});
         modelBuilder.Entity<User>().HasIndex(u => u.Email).IsUnique();
         modelBuilder.Entity<User>().Property(u => u.Role).HasConversion<string>();
         modelBuilder.Entity<Attribute>().Property(u => u.Category).HasConversion<string>();

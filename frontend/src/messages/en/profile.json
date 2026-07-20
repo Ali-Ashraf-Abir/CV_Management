@@ -1,0 +1,53 @@
+{
+  "title": "Profile",
+  "subtitle": "Manage your photo, details, and password.",
+  "photo": {
+    "heading": "Photo",
+    "hint": "PNG or JPG, up to 5 MB.",
+    "change": "Change photo",
+    "remove": "Remove",
+    "uploading": "Uploading…",
+    "removing": "Removing…"
+  },
+  "details": {
+    "heading": "Personal details",
+    "firstName": "First name",
+    "lastName": "Last name",
+    "email": "Email",
+    "emailHint": "Contact support to change your email.",
+    "role": "Role",
+    "save": "Save changes",
+    "saving": "Saving…",
+    "saved": "Profile updated.",
+    "noChanges": "Nothing to save yet."
+  },
+  "roles": {
+    "Candidate": "Candidate",
+    "Recruiter": "Recruiter",
+    "Admin": "Admin"
+  },
+  "security": {
+    "heading": "Password",
+    "description": "Choose a new password. You'll stay signed in on this device.",
+    "currentPassword": "Current password",
+    "newPassword": "New password",
+    "confirmNewPassword": "Confirm new password",
+    "submit": "Change password",
+    "submitting": "Changing…",
+    "success": "Password changed."
+  },
+  "validation": {
+    "firstNameRequired": "Enter a first name.",
+    "lastNameRequired": "Enter a last name.",
+    "currentPasswordRequired": "Enter your current password.",
+    "newPasswordRequired": "Enter a new password.",
+    "newPasswordMinLength": "Use at least 8 characters.",
+    "passwordsMustMatch": "Passwords don't match.",
+    "imageTooLarge": "That file is over 5 MB.",
+    "imageWrongType": "Choose a PNG or JPG file."
+  },
+  "errors": {
+    "loadFailed": "Couldn't load your profile. Try refreshing the page.",
+    "genericFailed": "Something went wrong. Try again."
+  }
+}

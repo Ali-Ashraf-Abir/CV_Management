@@ -48,6 +48,7 @@ builder.Services.AddScoped<IPositionService,PositionService>();
 builder.Services.AddScoped<ICVService,CVService>();
 builder.Services.AddScoped<ICVImageService,CVImageService>();
 builder.Services.AddScoped<ICVAttributeService,CVAttributeService>();
+builder.Services.AddScoped<IUserProfileService,UserProfileService>();
 builder.Services.AddScoped<IPositionRequirementService,PositionsRequirementService>();
 builder.Services.Configure<CloudinaryOptions>(builder.Configuration.GetSection("Cloudinary"));
 builder.Services.AddSingleton(sp =>

@@ -11,10 +11,22 @@ public class AttributeController(IAttributeService attributeService) : Controlle
 {
     [Authorize]
     [HttpGet]
-    public async Task<ActionResult<List<AttributeListDto>>> GetAll()
+    public async Task<ActionResult<PagedResultDto<AttributeListDto>>> GetAll(
+        [FromQuery] string? search,
+        [FromQuery] string? category,
+        [FromQuery] int page = 1,
+        [FromQuery] int pageSize = 20)
     {
-        var attributes = await attributeService.GetAllAttributeAsync();
+        var attributes = await attributeService.GetAllAttributeAsync(search, category, page, pageSize);
         return Ok(attributes);
+    }
+
+    [Authorize]
+    [HttpGet("categories")]
+    public async Task<ActionResult<List<string>>> GetCategories()
+    {
+        var categories = await attributeService.GetCategoriesAsync();
+        return Ok(categories);
     }
 
     [HttpGet("{id:guid}")]
@@ -42,7 +54,6 @@ public class AttributeController(IAttributeService attributeService) : Controlle
     [Authorize(Roles = "Recruiter,Administrator")]
     public async Task<ActionResult<AttributeDto>> Update(Guid id, UpdateAttributeDto dto)
     {
-
         var attribute = await attributeService.UpdateAsync(dto, id);
         return Ok(attribute);
     }
@@ -53,6 +64,15 @@ public class AttributeController(IAttributeService attributeService) : Controlle
     public async Task<IActionResult> Delete(Guid id)
     {
         await attributeService.DeleteAttribute(id);
+        return NoContent();
+    }
+
+    [HttpDelete]
+    [Authorize]
+    [Authorize(Roles = "Recruiter,Administrator")]
+    public async Task<IActionResult> DeleteMany([FromBody] List<Guid> ids)
+    {
+        await attributeService.DeleteAttributes(ids);
         return NoContent();
     }
 }

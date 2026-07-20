@@ -8,6 +8,19 @@
     "categoryFilterPlaceholder": "Kategorie",
     "allCategories": "Alle Kategorien",
     "resultsCount": "{filtered} von {total}",
+    "toolbar": {
+      "selectedCount": "{count} ausgewählt",
+      "clear": "Auswahl aufheben",
+      "edit": "Bearbeiten",
+      "delete": "Löschen"
+    },
+    "bulkDeleteSuccess": "{count} Attribute gelöscht",
+    "bulkDeleteError": "Die ausgewählten Attribute konnten nicht gelöscht werden",
+    "pagination": {
+      "pageOf": "Seite {page} von {totalPages}",
+      "previous": "Zurück",
+      "next": "Weiter"
+    },
     "columns": {
       "title": "Titel",
       "category": "Kategorie",
@@ -59,14 +72,38 @@
     "saveError": "Das Attribut konnte nicht gespeichert werden"
   },
   "types": {
-    "String": { "label": "Kurztext", "hint": "Einzeilig, z. B. Berufsbezeichnung" },
-    "Text": { "label": "Langtext", "hint": "Mehrzeilig, z. B. Zusammenfassung" },
-    "Image": { "label": "Bild", "hint": "Profilfoto, Zertifikat-Scan…" },
-    "Numeric": { "label": "Zahl", "hint": "Berufserfahrung in Jahren, Notendurchschnitt…" },
-    "Date": { "label": "Datum", "hint": "Einzelnes Datum, z. B. Geburtsdatum" },
-    "Period": { "label": "Zeitraum", "hint": "Beginn – Ende, z. B. Beschäftigung" },
-    "Boolean": { "label": "Ja / Nein", "hint": "Schalter, z. B. Umzugsbereitschaft" },
-    "Dropdown": { "label": "Dropdown", "hint": "Eine Option aus einer Werteliste auswählen" }
+    "String": {
+      "label": "Kurztext",
+      "hint": "Einzeilig, z. B. Berufsbezeichnung"
+    },
+    "Text": {
+      "label": "Langtext",
+      "hint": "Mehrzeilig, z. B. Zusammenfassung"
+    },
+    "Image": {
+      "label": "Bild",
+      "hint": "Profilfoto, Zertifikat-Scan…"
+    },
+    "Numeric": {
+      "label": "Zahl",
+      "hint": "Berufserfahrung in Jahren, Notendurchschnitt…"
+    },
+    "Date": {
+      "label": "Datum",
+      "hint": "Einzelnes Datum, z. B. Geburtsdatum"
+    },
+    "Period": {
+      "label": "Zeitraum",
+      "hint": "Beginn – Ende, z. B. Beschäftigung"
+    },
+    "Boolean": {
+      "label": "Ja / Nein",
+      "hint": "Schalter, z. B. Umzugsbereitschaft"
+    },
+    "Dropdown": {
+      "label": "Dropdown",
+      "hint": "Eine Option aus einer Werteliste auswählen"
+    }
   },
   "categories": {
     "Personal": "Persönliches",
@@ -120,10 +157,12 @@
     "emptyValue": "—",
     "periodTo": "Heute"
   },
-  "deleteAttribute": {
-    "title": "„{title}“ löschen?",
-    "description": "Dadurch werden das Attribut und alle zugehörigen Werte entfernt. Kandidaten, die es bereits ausgefüllt haben, verlieren diese Daten. Dies kann nicht rückgängig gemacht werden."
-  },
+"deleteAttribute": {
+  "title": "„{title}“ löschen?",
+  "description": "Dadurch werden das Attribut und alle zugehörigen Werte entfernt. Kandidaten, die es bereits ausgefüllt haben, verlieren diese Daten. Dies kann nicht rückgängig gemacht werden.",
+  "bulkTitle": "{count} Attribute löschen?",
+  "bulkDescription": "Dadurch werden diese Attribute und alle zugehörigen Werte entfernt. Kandidaten, die sie bereits ausgefüllt haben, verlieren diese Daten. Dies kann nicht rückgängig gemacht werden."
+},
   "common": {
     "delete": "Löschen",
     "cancel": "Abbrechen",

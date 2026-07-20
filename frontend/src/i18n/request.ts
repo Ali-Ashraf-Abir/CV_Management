@@ -8,7 +8,7 @@ export default getRequestConfig(async ({ requestLocale }) => {
     locale = routing.defaultLocale;
   }
 
-  const [nav, theme, language, login, register, attributes, cv, cvProfile] = await Promise.all([
+  const [nav, theme, language, login, register, attributes, cv, cvProfile, profile] = await Promise.all([
     import(`../messages/${locale}/nav.json`),
     import(`../messages/${locale}/theme.json`),
     import(`../messages/${locale}/language.json`),
@@ -17,6 +17,7 @@ export default getRequestConfig(async ({ requestLocale }) => {
     import(`../messages/${locale}/attributes.json`),
     import(`../messages/${locale}/cv.json`),
     import(`../messages/${locale}/cvProfile.json`),
+    import(`../messages/${locale}/profile.json`),
   ]);
 
   return {
@@ -30,6 +31,7 @@ export default getRequestConfig(async ({ requestLocale }) => {
       attributes: attributes.default,
       cv: cv.default,
       cvProfile: cvProfile.default,
+      profile: profile.default,
     },
   };
 });

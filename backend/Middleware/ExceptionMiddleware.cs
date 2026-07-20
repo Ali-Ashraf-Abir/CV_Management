@@ -3,7 +3,7 @@ using backend.Exceptions;
 
 namespace backend.Middleware;
 
-public class ExceptionMiddleware(RequestDelegate next)
+public class ExceptionMiddleware(RequestDelegate next, ILogger<ExceptionMiddleware> logger)
 {
     public async Task InvokeAsync(HttpContext context)
     {
@@ -39,6 +39,9 @@ public class ExceptionMiddleware(RequestDelegate next)
                     break;
 
                 default:
+                    logger.LogError(ex, "Unhandled exception processing {Method} {Path}",
+                        context.Request.Method, context.Request.Path + context.Request.QueryString);
+
                     context.Response.StatusCode = StatusCodes.Status500InternalServerError;
 
                     response = new

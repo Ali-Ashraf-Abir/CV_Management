@@ -1,11 +1,21 @@
-import { AttributeDto, AttributeListDto, AttributeSummaryDto, CreateAttributeDto, UpdateAttributeDto } from "@/types/attribute";
+import { AttributeDto, AttributeListDto, AttributeSummaryDto, CreateAttributeDto, PagedResultDto, UpdateAttributeDto } from "@/types/attribute";
 import { api } from "../api";
 
 
 export const attributesApi = {
-  list: async (): Promise<AttributeListDto[]> => {
-    const { data } = await api.get<AttributeListDto[]>("/attribute");
-    return data;
+  list: async (params: {
+    search?: string;
+    category?: string;
+    page?: number;
+    pageSize?: number;
+  }) => {
+    const query = new URLSearchParams();
+    if (params.search) query.set("search", params.search);
+    if (params.category && params.category !== "all") query.set("category", params.category);
+    query.set("page", String(params.page ?? 1));
+    query.set("pageSize", String(params.pageSize ?? 20));
+    const res = await api.get<PagedResultDto<AttributeListDto>>(`/attribute?${query.toString()}`);
+    return res.data;
   },
   getById: async (id: string): Promise<AttributeDto> => {
     const { data } = await api.get<AttributeDto>(`/attribute/${id}`);
@@ -27,4 +37,13 @@ export const attributesApi = {
     return data
   },
 
+
+  categories: async () => {
+    const res = await api.get<string[]>("/attribute/categories");
+    return res.data;
+  },
+
+  removeMany: async (ids: string[]) => {
+    await api.delete("/attribute", { data: ids });
+  },
 };

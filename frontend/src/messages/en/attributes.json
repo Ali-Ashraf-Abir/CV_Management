@@ -7,7 +7,21 @@
     "searchPlaceholder": "Search attributes…",
     "categoryFilterPlaceholder": "Category",
     "allCategories": "All categories",
+
     "resultsCount": "{filtered} of {total}",
+    "toolbar": {
+      "selectedCount": "{count} selected",
+      "clear": "Clear",
+      "edit": "Edit",
+      "delete": "Delete"
+    },
+    "bulkDeleteSuccess": "{count} attributes deleted",
+    "bulkDeleteError": "Couldn't delete the selected attributes",
+    "pagination": {
+      "pageOf": "Page {page} of {totalPages}",
+      "previous": "Previous",
+      "next": "Next"
+    },
     "columns": {
       "title": "Title",
       "category": "Category",
@@ -59,14 +73,38 @@
     "saveError": "Couldn't save the attribute"
   },
   "types": {
-    "String": { "label": "Short text", "hint": "Single line, e.g. job title" },
-    "Text": { "label": "Long text", "hint": "Multi-line, e.g. summary" },
-    "Image": { "label": "Image", "hint": "Profile photo, certificate scan…" },
-    "Numeric": { "label": "Number", "hint": "Years of experience, GPA…" },
-    "Date": { "label": "Date", "hint": "Single date, e.g. birth date" },
-    "Period": { "label": "Date range", "hint": "Start – end, e.g. employment" },
-    "Boolean": { "label": "Yes / No", "hint": "Toggle, e.g. willing to relocate" },
-    "Dropdown": { "label": "Dropdown", "hint": "Pick one from a value list" }
+    "String": {
+      "label": "Short text",
+      "hint": "Single line, e.g. job title"
+    },
+    "Text": {
+      "label": "Long text",
+      "hint": "Multi-line, e.g. summary"
+    },
+    "Image": {
+      "label": "Image",
+      "hint": "Profile photo, certificate scan…"
+    },
+    "Numeric": {
+      "label": "Number",
+      "hint": "Years of experience, GPA…"
+    },
+    "Date": {
+      "label": "Date",
+      "hint": "Single date, e.g. birth date"
+    },
+    "Period": {
+      "label": "Date range",
+      "hint": "Start – end, e.g. employment"
+    },
+    "Boolean": {
+      "label": "Yes / No",
+      "hint": "Toggle, e.g. willing to relocate"
+    },
+    "Dropdown": {
+      "label": "Dropdown",
+      "hint": "Pick one from a value list"
+    }
   },
   "categories": {
     "Personal": "Personal",
@@ -120,10 +158,12 @@
     "emptyValue": "—",
     "periodTo": "Present"
   },
-  "deleteAttribute": {
-    "title": "Delete \"{title}\"?",
-    "description": "This removes the attribute and every value attached to it. Candidates who already filled it in will lose that data. This can't be undone."
-  },
+"deleteAttribute": {
+  "title": "Delete \"{title}\"?",
+  "description": "This removes the attribute and every value attached to it. Candidates who already filled it in will lose that data. This can't be undone.",
+  "bulkTitle": "Delete {count} attributes?",
+  "bulkDescription": "This removes these attributes and every value attached to them. Candidates who already filled them in will lose that data. This can't be undone."
+},
   "common": {
     "delete": "Delete",
     "cancel": "Cancel",

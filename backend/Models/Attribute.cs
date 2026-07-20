@@ -1,12 +1,15 @@
 using System.ComponentModel.DataAnnotations;
 using backend.Enums;
+using NpgsqlTypes;
+
+// ... inside your Attribute class, alongside Title/Description/etc.
 
 namespace backend.Models;
 
 public class Attribute
 {
     public Guid Id { get; set; }
-
+    public NpgsqlTsVector SearchVector { get; set; } = null!;
     [Required]
     [StringLength(100, MinimumLength = 2)]
     public string Title { get; set; } = string.Empty;
@@ -25,9 +28,9 @@ public class Attribute
     [Range(0, int.MaxValue)]
     public int Version { get; set; }
 
-    public DateTime CreatedAt { get; set; } 
+    public DateTime CreatedAt { get; set; }
 
-    public DateTime UpdatedAt{get;set;} 
+    public DateTime UpdatedAt { get; set; }
 
     public ICollection<AttributeValue> Values { get; set; } = new List<AttributeValue>();
     public ICollection<PositionRequirement> PositionRequirements { get; set; } = [];
