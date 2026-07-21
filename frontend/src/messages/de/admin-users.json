@@ -1,0 +1,76 @@
+{
+    "title": "Benutzerverwaltung",
+    "subtitle": "Alle Konten einsehen, Rollen anpassen und Benutzer bearbeiten oder entfernen.",
+    "searchPlaceholder": "Nach Name oder E-Mail suchen",
+    "roleFilter": {
+        "all": "Alle Rollen"
+    },
+    "roles": {
+        "Candidate": "Kandidat",
+        "Recruiter": "Recruiter",
+        "Administrator": "Administrator"
+    },
+    "table": {
+        "user": "Benutzer",
+        "role": "Rolle",
+        "joined": "Beigetreten",
+        "selectAll": "Alle Benutzer auf dieser Seite auswählen",
+        "selectRow": "{name} auswählen"
+    },
+    "toolbar": {
+        "selected": "{count} ausgewählt",
+        "clear": "Auswahl aufheben",
+        "roleToApply": "Anzuwendende Rolle",
+        "selfIncludedWarning": "Warnung! Sie sind dabei, Ihr eigenes Konto zu ändern",
+        "applyRole": "Rolle anwenden"
+    },
+    "actions": {
+        "edit": "Bearbeiten",
+        "delete": "Löschen",
+        "deleting": "Wird gelöscht…",
+        "cancel": "Abbrechen",
+        "save": "Änderungen speichern",
+        "saving": "Wird gespeichert…"
+    },
+    "empty": {
+        "title": "Keine Benutzer gefunden",
+        "description": "Versuchen Sie einen anderen Suchbegriff oder Rollenfilter."
+    },
+    "editModal": {
+        "title": "Benutzer bearbeiten",
+        "description": "Details und Rolle dieser Person aktualisieren."
+    },
+    "fields": {
+        "firstName": "Vorname",
+        "lastName": "Nachname",
+        "email": "E-Mail",
+        "role": "Rolle",
+        "photoUrl": "Foto-URL",
+        "photoUrlPlaceholder": "https://…"
+    },
+    "validation": {
+        "firstNameRequired": "Vorname ist erforderlich",
+        "lastNameRequired": "Nachname ist erforderlich",
+        "emailRequired": "E-Mail ist erforderlich",
+        "emailInvalid": "Bitte eine gültige E-Mail-Adresse eingeben"
+    },
+    "deleteDialog": {
+        "title": "Benutzer löschen",
+        "descriptionBulk": "Dadurch werden {count} ausgewählte Konten dauerhaft entfernt. Dies kann nicht rückgängig gemacht werden."
+    },
+    "pagination": {
+        "showing": "{from}–{to} von {total} werden angezeigt",
+        "previous": "Zurück",
+        "next": "Weiter"
+    },
+    "toast": {
+        "roleUpdated": "Rolle aktualisiert",
+        "roleUpdateFailed": "Rolle konnte nicht aktualisiert werden",
+        "userUpdated": "Benutzer aktualisiert",
+        "userUpdateFailed": "Benutzer konnte nicht aktualisiert werden",
+        "userDeleted": "Benutzer gelöscht",
+        "userDeleteFailed": "Benutzer konnte nicht gelöscht werden",
+        "usersDeleted": "Benutzer gelöscht",
+        "usersDeleteFailed": "Ausgewählte Benutzer konnten nicht gelöscht werden"
+    }
+}

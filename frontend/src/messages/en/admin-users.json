@@ -1,0 +1,76 @@
+{
+    "title": "User management",
+    "subtitle": "View every account, adjust roles, and edit or remove users.",
+    "searchPlaceholder": "Search by name or email",
+    "roleFilter": {
+        "all": "All roles"
+    },
+    "roles": {
+        "Candidate": "Candidate",
+        "Recruiter": "Recruiter",
+        "Administrator": "Administrator"
+    },
+    "table": {
+        "user": "User",
+        "role": "Role",
+        "joined": "Joined",
+        "selectAll": "Select all users on this page",
+        "selectRow": "Select {name}"
+    },
+    "toolbar": {
+        "selected": "{count} selected",
+        "clear": "Clear selection",
+        "selfIncludedWarning": "Warning! You are about to change your own account",
+        "roleToApply": "Role to apply",
+        "applyRole": "Apply role"
+    },
+    "actions": {
+        "edit": "Edit",
+        "delete": "Delete",
+        "deleting": "Deleting…",
+        "cancel": "Cancel",
+        "save": "Save changes",
+        "saving": "Saving…"
+    },
+    "empty": {
+        "title": "No users found",
+        "description": "Try a different search term or role filter."
+    },
+    "editModal": {
+        "title": "Edit user",
+        "description": "Update this person's details and role."
+    },
+    "fields": {
+        "firstName": "First name",
+        "lastName": "Last name",
+        "email": "Email",
+        "role": "Role",
+        "photoUrl": "Photo URL",
+        "photoUrlPlaceholder": "https://…"
+    },
+    "validation": {
+        "firstNameRequired": "First name is required",
+        "lastNameRequired": "Last name is required",
+        "emailRequired": "Email is required",
+        "emailInvalid": "Enter a valid email address"
+    },
+    "deleteDialog": {
+        "title": "Delete users",
+        "descriptionBulk": "This will permanently remove {count} selected account(s). This can't be undone."
+    },
+    "pagination": {
+        "showing": "Showing {from}–{to} of {total}",
+        "previous": "Previous",
+        "next": "Next"
+    },
+    "toast": {
+        "roleUpdated": "Role updated",
+        "roleUpdateFailed": "Couldn't update the role",
+        "userUpdated": "User updated",
+        "userUpdateFailed": "Couldn't update the user",
+        "userDeleted": "User deleted",
+        "userDeleteFailed": "Couldn't delete the user",
+        "usersDeleted": "Users deleted",
+        "usersDeleteFailed": "Couldn't delete the selected users"
+    }
+}

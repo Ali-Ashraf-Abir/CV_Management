@@ -11,7 +11,7 @@ export default function RecruiterLayout({
 }) {
   return (
     <ProtectedRoute>
-      <RoleGuard roles={["Recruiter"]}>
+      <RoleGuard roles={["Recruiter","Administrator"]}>
         {children}
       </RoleGuard>
     </ProtectedRoute>
