@@ -26,9 +26,11 @@ function getRoleLinks(role: string | undefined, base: string, t: any): NavLink[]
 
   const recruiterLinks: NavLink[] = [
     { href: `${base}/dashboard`, label: t("dashboard") },
-    { href: `${base}/positions`, label: t("positions") },
+    { href: `${base}/jobs`, label: t("jobs") },
     { href: `${base}/my-positions`, label: t("myPositions") },
+    { href: `${base}/all-positions`, label: t("allPositions") },
     { href: `${base}/attributes`, label: t("attributes") },
+
     { href: `${base}/profile`, label: t("profile") },
   ];
   const adminExtraLinks: NavLink[] = [{ href: `${base}/users`, label: t("users") }];

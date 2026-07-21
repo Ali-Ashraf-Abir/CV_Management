@@ -29,17 +29,28 @@ const STATUS_FILTERS: Array<PositionStatus | "All"> = [
   "Archived",
 ];
 
-export function RecruiterPositionsPage() {
+export function RecruiterPositionsPage({ type }: { type: string }) {
   const [positions, setPositions] = useState<PositionSummaryDto[] | null>(null);
   const [statusFilter, setStatusFilter] = useState<PositionStatus | "All">("All");
 
   async function load() {
-    try {
+    if (type == 'me') {
+      try {
+        const data = await positionsApi.myList(statusFilter === "All" ? undefined : statusFilter);
+        setPositions(data);
+      } catch (err) {
+        toast.error(extractErrorMessage(err, "Couldn't load positions"));
+        setPositions([]);
+      }
+    }
+    else if (type=='all'){
+      try {
       const data = await positionsApi.list(statusFilter === "All" ? undefined : statusFilter);
       setPositions(data);
     } catch (err) {
       toast.error(extractErrorMessage(err, "Couldn't load positions"));
       setPositions([]);
+    }
     }
   }
 

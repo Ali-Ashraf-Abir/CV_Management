@@ -8,7 +8,7 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { useAuth } from "@/hooks/useAuth";
 import { isRecruiterOrAdmin } from "@/lib/utils/isRecruiterOrAdmin";
 
-export default function PositionsPage() {
+export default function AllPositionsPage() {
   const { user, isLoading } = useAuth();
 
   if (isLoading) {
@@ -21,5 +21,5 @@ export default function PositionsPage() {
     );
   }
 
-  return isRecruiterOrAdmin(user?.role)? <RecruiterPositionsPage /> : <CandidatePositionsPage />;
+  return isRecruiterOrAdmin(user?.role)? <RecruiterPositionsPage type="all"/> : <CandidatePositionsPage />;
 }

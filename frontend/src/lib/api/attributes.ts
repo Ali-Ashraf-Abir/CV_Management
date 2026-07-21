@@ -32,8 +32,8 @@ export const attributesApi = {
   remove: async (id: string): Promise<void> => {
     await api.delete(`/attribute/${id}`);
   },
-  listFilterable: async (): Promise<AttributeSummaryDto[]> => {
-    const { data } = await api.get<AttributeSummaryDto[]>("/attribute");
+  listFilterable: async (): Promise<PagedResultDto<AttributeSummaryDto>> => {
+    const { data } = await api.get<PagedResultDto<AttributeSummaryDto>>("/attribute");
     return data
   },
 

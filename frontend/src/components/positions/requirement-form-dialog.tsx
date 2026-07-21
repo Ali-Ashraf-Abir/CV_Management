@@ -38,8 +38,9 @@ import { extractErrorMessage } from "@/lib/api";
 
 import { OPERATOR_LABEL } from "@/lib/constants/requirement-operator";
 import { ALLOWED_OPERATORS_BY_TYPE, PositionRequirementDto, RequirementOperator } from "@/types/position";
-import { AttributeDto, AttributeSummaryDto } from "@/types/attribute";
+import { AttributeDto, AttributeSummaryDto, PagedResultDto } from "@/types/attribute";
 import { RequirementValueFields } from "./requirement-value-fields";
+import { AttributeCombobox } from "./attribute-combobox";
 import { buildRequirementSchema, RequirementFormValues } from "@/validations/requirement.schema";
 import { positionRequirementsApi } from "@/lib/api/positionRequirement";
 import { Checkbox } from "../ui/checkbox";
@@ -63,7 +64,7 @@ type RequirementFormDialogProps =
 export function RequirementFormDialog(props: RequirementFormDialogProps) {
   const { mode, positionId, onSaved } = props;
   const [open, setOpen] = useState(false);
-  const [attributes, setAttributes] = useState<AttributeSummaryDto[] | null>(null);
+  const [attributes, setAttributes] = useState<PagedResultDto<AttributeSummaryDto> | null>(null);
   const [attributeDetails, setAttributeDetials] = useState<AttributeDto | null>(null);
   useEffect(() => {
     if (open && mode === "add" && attributes === null) {
@@ -76,7 +77,7 @@ export function RequirementFormDialog(props: RequirementFormDialogProps) {
 
   const availableAttributes = useMemo(() => {
     if (mode !== "add" || !attributes) return [];
-    return attributes.filter((a) => !props.existingAttributeIds.includes(a.id));
+    return attributes.items.filter((a) => !props.existingAttributeIds.includes(a.id));
   }, [attributes, mode, props]);
 
   const form = useForm<RequirementFormValues>({
@@ -105,7 +106,7 @@ export function RequirementFormDialog(props: RequirementFormDialogProps) {
         values: [],
       };
     }
-    return attributes?.find((a) => a.id === attributeId) ?? null;
+    return attributes?.items.find((a) => a.id === attributeId) ?? null;
   }, [mode, props, attributes, attributeId]);
   useEffect(() => {
     if (selectedAttribute) {
@@ -222,28 +223,19 @@ export function RequirementFormDialog(props: RequirementFormDialogProps) {
                 render={({ field }) => (
                   <FormItem>
                     <FormLabel>Attribute</FormLabel>
-                    <Select value={field.value} onValueChange={field.onChange}>
-                      <FormControl>
-                        <SelectTrigger className="w-full">
-                          <SelectValue placeholder="Choose an attribute" />
-                        </SelectTrigger>
-                      </FormControl>
-                      <SelectContent>
-                        {attributes === null && (
-                          <div className="px-2 py-1.5 text-sm text-muted-foreground">Loading...</div>
-                        )}
-                        {attributes !== null && availableAttributes.length === 0 && (
-                          <div className="px-2 py-1.5 text-sm text-muted-foreground">
-                            No more filterable attributes available.
-                          </div>
-                        )}
-                        {availableAttributes.map((a) => (
-                          <SelectItem key={a.id} value={a.id}>
-                            {a.title}
-                          </SelectItem>
-                        ))}
-                      </SelectContent>
-                    </Select>
+                    <FormControl>
+                      <AttributeCombobox
+                        attributes={availableAttributes}
+                        value={field.value}
+                        onChange={field.onChange}
+                        isLoading={attributes === null}
+                        emptyText={
+                          attributes !== null && availableAttributes.length === 0
+                            ? "No more filterable attributes available."
+                            : "No attributes match your search."
+                        }
+                      />
+                    </FormControl>
                     <FormMessage />
                   </FormItem>
                 )}

@@ -9,6 +9,12 @@ export const positionsApi = {
     });
     return data;
   },
+  myList: async (status?: PositionStatus): Promise<PositionSummaryDto[]> => {
+    const { data } = await api.get<PositionSummaryDto[]>("/position/me", {
+      params: status ? { status } : undefined,
+    });
+    return data;
+  },
   getById: async (id: string): Promise<PositionDto> => {
     const { data } = await api.get<PositionDto>(`/position/${id}`);
     return data;

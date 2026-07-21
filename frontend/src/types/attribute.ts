@@ -107,10 +107,9 @@ export interface UpdateAttributeValueDto {
   sortOrder: number;
 }
 
-// Types that need a value list to make sense
 export const VALUE_LIST_TYPES: AttributeType[] = ["Dropdown"];
 
-// Helper: does this attribute type require predefined values
+
 export function requiresValues(type: AttributeType) {
   return VALUE_LIST_TYPES.includes(type);
 }
