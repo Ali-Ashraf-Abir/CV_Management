@@ -57,7 +57,7 @@ The shared set of CV fields recruiters can attach to positions as requirements.
 ### Position detail & requirements
 A single job posting with its status, ownership, and attached requirements.
 
-![Position detail](./screenshots/position-attribute.png)
+![Position detail](./screenshots/positions-attribute.png)
 
 ### User management
 Admin view for managing accounts and roles across the platform.

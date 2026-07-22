@@ -11,7 +11,7 @@ public class UserService(ApplicationDbContext _db): IUserService
 {
     public async Task<UserResponseDto> GetUserAsync(Guid userId)
     {
-        var result = await _db.Users.FirstOrDefaultAsync(u=>u.Id == userId);
+        var result = await _db.Users.Include(p=>p.AppliedPositions).FirstOrDefaultAsync(u=>u.Id == userId);
         if(result == null)
         {
             throw new NotFoundException("User Not Found");

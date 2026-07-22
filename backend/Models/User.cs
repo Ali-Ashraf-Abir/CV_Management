@@ -17,4 +17,5 @@ public class User
     public DateTime UpdatedAt { get; set; }
     public ICollection<RefreshToken> RefreshTokens { get; set; } = new List<RefreshToken>();
     public ICollection<Position> Positions { get; set; } = [];
+    public ICollection<AppliedPosition> AppliedPositions { get; set; } = [];
 }

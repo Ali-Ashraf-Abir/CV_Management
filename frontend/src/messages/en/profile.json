@@ -24,7 +24,7 @@
   "roles": {
     "Candidate": "Candidate",
     "Recruiter": "Recruiter",
-    "Admin": "Admin"
+    "Administrator": "Administrator"
   },
   "security": {
     "heading": "Password",

@@ -27,4 +27,5 @@ public class Position
     public int Version { get; set; }
 
     public ICollection<PositionRequirement> Requirements { get; set; } = [];
+    public ICollection<AppliedPosition> Applications { get; set; } = [];
 }

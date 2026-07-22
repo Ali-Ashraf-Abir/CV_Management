@@ -26,7 +26,8 @@ import { ProfileProgressSidebar } from "./profile-progress-sidebar";
 import { countFilled } from "./requirement-progress";
 import { RequirementCategorySection } from "./requirement-category";
 import { SaveBar } from "./savebar";
-
+import { applicationsApi } from "@/lib/api/application";
+import { ApplicationDto } from "@/types/application";
 export type CandidateProfileValues = { values: Record<string, string> };
 
 export function CandidatePositionCv({ positionId }: { positionId: string }) {
@@ -36,7 +37,16 @@ export function CandidatePositionCv({ positionId }: { positionId: string }) {
   const [cv, setCv] = useState<CVDto | null>(null);
   const [dropdownAttributes, setDropdownAttributes] = useState<Record<string, AttributeDto>>({});
   const [loadError, setLoadError] = useState<string | null>(null);
-
+  const [application, setApplication] = useState<ApplicationDto | null>(null);
+  const [applicationLoaded, setApplicationLoaded] = useState(false);
+  useEffect(() => {
+    applicationsApi
+      .myApplications()
+      .then((apps) => setApplication(apps.find((a) => a.positionId === positionId) ?? null))
+      .catch(() => {
+      })
+      .finally(() => setApplicationLoaded(true));
+  }, [positionId]);
   useEffect(() => {
     (async () => {
       try {
@@ -187,9 +197,23 @@ export function CandidatePositionCv({ positionId }: { positionId: string }) {
 
     try {
       await Promise.all(upserts);
-      toast.success(t("saveSuccessTitle"), {
-        description: t("saveSuccessDescription"),
-      });
+
+      if (!application) {
+        try {
+          const created = await applicationsApi.apply(positionId);
+          setApplication(created);
+          toast.success(t("applySuccessTitle"), {
+            description: t("applySuccessDescription"),
+          });
+        } catch (err) {
+          toast.error(extractErrorMessage(err, t("applyErrorFallback")));
+          return;
+        }
+      } else {
+        toast.success(t("saveSuccessTitle"), {
+          description: t("saveSuccessDescription"),
+        });
+      }
     } catch (err) {
       toast.error(extractErrorMessage(err, t("saveErrorFallback")));
     }
@@ -265,6 +289,7 @@ export function CandidatePositionCv({ positionId }: { positionId: string }) {
               filledCount={filledCount}
               totalCount={totalCount}
               isSubmitting={form.formState.isSubmitting}
+              isApplied={!!application}
             />
           </form>
         </Form>

@@ -37,7 +37,9 @@ public class ExceptionMiddleware(RequestDelegate next, ILogger<ExceptionMiddlewa
                 case ConflictException:
                     context.Response.StatusCode = StatusCodes.Status409Conflict;
                     break;
-
+                case ForbiddenException:
+                    context.Response.StatusCode = StatusCodes.Status409Conflict;
+                    break;
                 default:
                     logger.LogError(ex, "Unhandled exception processing {Method} {Path}",
                         context.Request.Method, context.Request.Path + context.Request.QueryString);

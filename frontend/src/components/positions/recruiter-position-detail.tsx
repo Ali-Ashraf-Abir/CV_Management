@@ -25,8 +25,6 @@ import { positionRequirementsApi } from "@/lib/api/positionRequirement";
 export function RecruiterPositionDetail({ positionId }: { positionId: string }) {
   const router = useRouter();
   const [position, setPosition] = useState<PositionDto | null>(null);
-  // NOTE: PositionByIdAsync only sets RequirementsCount, not the Requirements
-  // list itself -- so requirements are fetched separately from their own endpoint.
   const [requirements, setRequirements] = useState<PositionRequirementDto[] | null>(null);
 
   async function load() {
@@ -44,7 +42,6 @@ export function RecruiterPositionDetail({ positionId }: { positionId: string }) 
 
   useEffect(() => {
     load();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [positionId]);
 
   if (!position || !requirements) {

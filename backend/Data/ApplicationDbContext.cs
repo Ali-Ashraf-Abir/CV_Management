@@ -18,6 +18,7 @@ public class ApplicationDbContext : DbContext
     public DbSet<PositionRequirement> PositionsRequirement => Set<PositionRequirement>();
     public DbSet<CV> CVs => Set<CV>();
     public DbSet<CVAttributes> CVAttributes => Set<CVAttributes>();
+    public DbSet<AppliedPosition> AppliedPositions => Set<AppliedPosition>();
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         base.OnModelCreating(modelBuilder);

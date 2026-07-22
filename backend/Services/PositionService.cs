@@ -12,7 +12,7 @@ public class PositionService(ApplicationDbContext _db) : IPositionService
 {
     public async Task<PositionDto> PositionByIdAsync(Guid id)
     {
-        var position = await _db.Positions.Include(p => p.CreatedBy).FirstOrDefaultAsync(p => p.Id == id) ?? throw new NotFoundException("Position was not found.");
+        var position = await _db.Positions.Include(p => p.CreatedBy).Include(p=>p.Applications).FirstOrDefaultAsync(p => p.Id == id) ?? throw new NotFoundException("Position was not found.");
         var requirementsCount = await _db.PositionsRequirement.CountAsync(r => r.PositionId == id);
         return MapToDto(position, requirementsCount);
     }
@@ -42,7 +42,7 @@ public class PositionService(ApplicationDbContext _db) : IPositionService
         var query = _db.Positions.Where(p => p.CreatedById == userId);
         if (status is not null)
             query = query.Where(p => p.Status == status);
-        return await query.OrderByDescending(p => p.CreatedAt).Select(p => new PositionSummaryDto
+        return await query.OrderByDescending(p => p.CreatedAt).Include(p=>p.Applications).Select(p => new PositionSummaryDto
         {
             Id = p.Id,
             Title = p.Title,

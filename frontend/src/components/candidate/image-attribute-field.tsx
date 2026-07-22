@@ -10,7 +10,7 @@ import { cn } from "@/lib/utils";
 import { extractErrorMessage } from "@/lib/api";
 import { cvAttributesApi } from "@/lib/api/cvAttribute";
 
-const MAX_IMAGE_SIZE = 5 * 1024 * 1024; // matches backend's 5MB limit
+const MAX_IMAGE_SIZE = 5 * 1024 * 1024; 
 
 export function ImageAttributeField({
     attributeId,
@@ -60,11 +60,11 @@ export function ImageAttributeField({
     async function handleRemove() {
         setError(null);
         const previous = value;
-        onChange(""); // optimistic
+        onChange(""); 
         try {
             await cvAttributesApi.deleteImage(attributeId);
         } catch (err) {
-            onChange(previous); // revert on failure
+            onChange(previous); 
             toast.error(extractErrorMessage(err, t("imageDeleteError")));
         }
     }

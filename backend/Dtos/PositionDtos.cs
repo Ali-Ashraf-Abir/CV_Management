@@ -32,6 +32,7 @@ public class PositionSummaryDto
     public DateTime CreatedAt { get; set; }
     public int Version { get; set; }
     public int RequirementsCount { get; set; }
+    public int ApplicationsCount { get; set; }
 }
 
 public class CreatePositionDto

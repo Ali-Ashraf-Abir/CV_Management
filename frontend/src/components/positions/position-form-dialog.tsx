@@ -34,7 +34,6 @@ import { PositionDto } from "@/types/position";
 import { positionFormSchema, PositionFormValues } from "@/validations/position.schema";
 
 interface PositionFormDialogProps {
-  /** Omit to create a new position; pass an existing position to edit it. */
   position?: PositionDto;
   onSaved: (position: PositionDto) => void;
   trigger?: React.ReactNode;

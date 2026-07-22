@@ -2,8 +2,6 @@ using System.ComponentModel.DataAnnotations;
 using backend.Enums;
 using NpgsqlTypes;
 
-// ... inside your Attribute class, alongside Title/Description/etc.
-
 namespace backend.Models;
 
 public class Attribute
