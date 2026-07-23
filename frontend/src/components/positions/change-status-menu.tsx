@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { toast } from "sonner";
 import { ChevronDown, Loader2 } from "lucide-react";
+import { useTranslations } from "next-intl";
 
 import { Button } from "@/components/ui/button";
 import {
@@ -23,6 +24,7 @@ export function ChangeStatusMenu({
   position: PositionDto;
   onChanged: (position: PositionDto) => void;
 }) {
+  const t = useTranslations("positions");
   const [isChanging, setIsChanging] = useState(false);
   const nextOptions = POSITION_STATUS_TRANSITIONS[position.status];
 
@@ -30,10 +32,10 @@ export function ChangeStatusMenu({
     setIsChanging(true);
     try {
       const updated = await positionsApi.changeStatus(position.id, { status });
-      toast.success(`Position marked as ${status.toLowerCase()}`);
+      toast.success(t("statusChangeSuccess", { status: t(`status.${status}`) }));
       onChanged(updated);
     } catch (err) {
-      toast.error(extractErrorMessage(err, "Couldn't change the status"));
+      toast.error(extractErrorMessage(err, t("statusChangeError")));
     } finally {
       setIsChanging(false);
     }
@@ -48,14 +50,14 @@ export function ChangeStatusMenu({
       <DropdownMenuTrigger asChild>
         <Button variant="outline" disabled={isChanging}>
           {isChanging && <Loader2 className="size-4 animate-spin" />}
-          Change status
+          {t("changeStatus")}
           <ChevronDown className="size-4" />
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end">
         {nextOptions.map((status) => (
           <DropdownMenuItem key={status} onSelect={() => handleChange(status)}>
-            Mark as {status}
+            {t("markAsStatus", { status: t(`status.${status}`) })}
           </DropdownMenuItem>
         ))}
       </DropdownMenuContent>

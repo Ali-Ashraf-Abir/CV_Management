@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { toast } from "sonner";
 import { Loader2, Trash2 } from "lucide-react";
+import { useTranslations } from "next-intl";
 
 import {
   AlertDialog,
@@ -28,16 +29,17 @@ export function DeletePositionDialog({
   positionTitle: string;
   onDeleted: () => void;
 }) {
+  const t = useTranslations("positions");
   const [isDeleting, setIsDeleting] = useState(false);
 
   async function handleDelete() {
     setIsDeleting(true);
     try {
       await positionsApi.remove(positionId);
-      toast.success("Position deleted");
+      toast.success(t("positionDeleted"));
       onDeleted();
     } catch (err) {
-      toast.error(extractErrorMessage(err, "Couldn't delete the position"));
+      toast.error(extractErrorMessage(err, t("positionDeleteError")));
     } finally {
       setIsDeleting(false);
     }
@@ -48,19 +50,16 @@ export function DeletePositionDialog({
       <AlertDialogTrigger asChild>
         <Button variant="ghost" size="icon" className="text-destructive hover:text-destructive">
           <Trash2 className="size-4" />
-          <span className="sr-only">Delete position</span>
+          <span className="sr-only">{t("deletePositionSr")}</span>
         </Button>
       </AlertDialogTrigger>
       <AlertDialogContent>
         <AlertDialogHeader>
-          <AlertDialogTitle>Delete &ldquo;{positionTitle}&rdquo;?</AlertDialogTitle>
-          <AlertDialogDescription>
-            This permanently removes the position and all of its requirements. This can&apos;t be
-            undone.
-          </AlertDialogDescription>
+          <AlertDialogTitle>{t("deletePositionTitle", { title: positionTitle })}</AlertDialogTitle>
+          <AlertDialogDescription>{t("deletePositionDescription")}</AlertDialogDescription>
         </AlertDialogHeader>
         <AlertDialogFooter>
-          <AlertDialogCancel disabled={isDeleting}>Cancel</AlertDialogCancel>
+          <AlertDialogCancel disabled={isDeleting}>{t("cancel")}</AlertDialogCancel>
           <AlertDialogAction
             onClick={(e) => {
               e.preventDefault();
@@ -70,7 +69,7 @@ export function DeletePositionDialog({
             className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
           >
             {isDeleting && <Loader2 className="size-4 animate-spin" />}
-            Delete
+            {t("delete")}
           </AlertDialogAction>
         </AlertDialogFooter>
       </AlertDialogContent>

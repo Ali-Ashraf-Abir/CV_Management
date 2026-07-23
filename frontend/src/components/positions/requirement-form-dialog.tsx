@@ -5,6 +5,7 @@ import { useForm } from "react-hook-form";
 
 import { toast } from "sonner";
 import { Loader2, Plus, Pencil } from "lucide-react";
+import { useTranslations } from "next-intl";
 
 import { Button } from "@/components/ui/button";
 import {
@@ -62,6 +63,7 @@ type RequirementFormDialogProps =
   };
 
 export function RequirementFormDialog(props: RequirementFormDialogProps) {
+  const t = useTranslations("positions");
   const { mode, positionId, onSaved } = props;
   const [open, setOpen] = useState(false);
   const [attributes, setAttributes] = useState<PagedResultDto<AttributeSummaryDto> | null>(null);
@@ -71,9 +73,9 @@ export function RequirementFormDialog(props: RequirementFormDialogProps) {
       attributesApi
         .listFilterable()
         .then(setAttributes)
-        .catch((err) => toast.error(extractErrorMessage(err, "Couldn't load attributes")));
+        .catch((err) => toast.error(extractErrorMessage(err, t("loadAttributesError"))));
     }
-  }, [open, mode, attributes]);
+  }, [open, mode, attributes, t]);
 
   const availableAttributes = useMemo(() => {
     if (mode !== "add" || !attributes) return [];
@@ -171,11 +173,11 @@ export function RequirementFormDialog(props: RequirementFormDialogProps) {
             version: props.requirement.version,
           });
 
-      toast.success(mode === "add" ? "Requirement added" : "Requirement updated");
+      toast.success(mode === "add" ? t("requirementAdded") : t("requirementUpdated"));
       setOpen(false);
       onSaved(saved);
     } catch (err) {
-      toast.error(extractErrorMessage(err, "Couldn't save the requirement"));
+      toast.error(extractErrorMessage(err, t("requirementSaveError")));
     }
   }
 
@@ -195,22 +197,22 @@ export function RequirementFormDialog(props: RequirementFormDialogProps) {
         {mode === "add" ? (
           <Button size="sm">
             <Plus className="size-4" />
-            Add requirement
+            {t("addRequirementButton")}
           </Button>
         ) : (
           <Button variant="ghost" size="icon">
             <Pencil className="size-4" />
-            <span className="sr-only">Edit requirement</span>
+            <span className="sr-only">{t("editRequirementSr")}</span>
           </Button>
         )}
       </DialogTrigger>
       <DialogContent className="sm:max-w-md">
         <DialogHeader>
-          <DialogTitle>{mode === "add" ? "Add a requirement" : "Edit requirement"}</DialogTitle>
+          <DialogTitle>{mode === "add" ? t("addRequirementTitle") : t("editRequirementTitle")}</DialogTitle>
           <DialogDescription>
             {mode === "add"
-              ? "Pick an attribute and the rule candidates must satisfy."
-              : `Editing the rule for "${props.requirement.attributeTitle}".`}
+              ? t("addRequirementDescription")
+              : t("editRequirementDescription", { title: props.requirement.attributeTitle })}
           </DialogDescription>
         </DialogHeader>
 
@@ -222,7 +224,7 @@ export function RequirementFormDialog(props: RequirementFormDialogProps) {
                 name="attributeId"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Attribute</FormLabel>
+                    <FormLabel>{t("attributeLabel")}</FormLabel>
                     <FormControl>
                       <AttributeCombobox
                         attributes={availableAttributes}
@@ -231,8 +233,8 @@ export function RequirementFormDialog(props: RequirementFormDialogProps) {
                         isLoading={attributes === null}
                         emptyText={
                           attributes !== null && availableAttributes.length === 0
-                            ? "No more filterable attributes available."
-                            : "No attributes match your search."
+                            ? t("noMoreAttributes")
+                            : t("noAttributesMatch")
                         }
                       />
                     </FormControl>
@@ -259,7 +261,7 @@ export function RequirementFormDialog(props: RequirementFormDialogProps) {
                         />
                       </FormControl>
 
-                      <FormLabel>Has requirement</FormLabel>
+                      <FormLabel>{t("hasRequirementLabel")}</FormLabel>
                     </FormItem>
                   )}
                 />
@@ -273,11 +275,11 @@ export function RequirementFormDialog(props: RequirementFormDialogProps) {
                   name="operator"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>Operator</FormLabel>
+                      <FormLabel>{t("operatorLabel")}</FormLabel>
                       <Select value={field.value} onValueChange={field.onChange}>
                         <FormControl>
                           <SelectTrigger className="w-full">
-                            <SelectValue placeholder="Choose an operator" />
+                            <SelectValue placeholder={t("operatorPlaceholder")} />
                           </SelectTrigger>
                         </FormControl>
                         <SelectContent>
@@ -314,14 +316,14 @@ export function RequirementFormDialog(props: RequirementFormDialogProps) {
                 onClick={() => setOpen(false)}
                 disabled={form.formState.isSubmitting}
               >
-                Cancel
+                {t("cancel")}
               </Button>
               <Button
                 type="submit"
                 disabled={form.formState.isSubmitting || !selectedAttribute}
               >
                 {form.formState.isSubmitting && <Loader2 className="size-4 animate-spin" />}
-                {mode === "add" ? "Add requirement" : "Save changes"}
+                {mode === "add" ? t("addRequirementButton") : t("saveChanges")}
               </Button>
             </DialogFooter>
           </form>

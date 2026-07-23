@@ -1,3 +1,6 @@
+"use client";
+
+import { useTranslations } from "next-intl";
 import { Badge } from "@/components/ui/badge";
 import { PositionStatus } from "@/types/position";
 import { cn } from "@/lib/utils";
@@ -10,9 +13,11 @@ const STATUS_STYLES: Record<PositionStatus, string> = {
 };
 
 export function PositionStatusBadge({ status }: { status: PositionStatus }) {
+  const t = useTranslations("positions");
+
   return (
     <Badge className={cn("font-medium", STATUS_STYLES[status])} variant="outline">
-      {status}
+      {t(`status.${status}`)}
     </Badge>
   );
 }

@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { toast } from "sonner";
 import { Trash2 } from "lucide-react";
+import { useTranslations } from "next-intl";
 
 import {
   AlertDialog,
@@ -39,10 +40,12 @@ export function RequirementList({
   onChange: (requirements: PositionRequirementDto[]) => void;
   readOnly?: boolean;
 }) {
+  const t = useTranslations("positions");
+
   return (
     <div className="space-y-3">
       <div className="flex items-center justify-between">
-        <h2 className="font-medium">Requirements</h2>
+        <h2 className="font-medium">{t("requirementsHeading")}</h2>
         {!readOnly && (
           <RequirementFormDialog
             mode="add"
@@ -58,9 +61,7 @@ export function RequirementList({
         <Card className="border-dashed">
           <CardContent className="flex flex-col items-center gap-2 py-8 text-center">
             <ListChecks className="size-6 text-muted-foreground" />
-            <p className="text-sm text-muted-foreground">
-              No requirements yet. Candidates will see an empty profile section.
-            </p>
+            <p className="text-sm text-muted-foreground">{t("noRequirementsMessage")}</p>
           </CardContent>
         </Card>
       )}
@@ -96,16 +97,17 @@ function RequirementRow({
   onUpdated: (r: PositionRequirementDto) => void;
   onDeleted: () => void;
 }) {
+  const t = useTranslations("positions");
   const [isDeleting, setIsDeleting] = useState(false);
 
   async function handleDelete() {
     setIsDeleting(true);
     try {
       await positionRequirementsApi.remove(positionId, requirement.id);
-      toast.success("Requirement removed");
+      toast.success(t("requirementRemoved"));
       onDeleted();
     } catch (err) {
-      toast.error(extractErrorMessage(err, "Couldn't remove the requirement"));
+      toast.error(extractErrorMessage(err, t("requirementRemoveError")));
     } finally {
       setIsDeleting(false);
     }
@@ -121,7 +123,11 @@ function RequirementRow({
               {CATEGORY_LABEL[requirement.attributeCategory]}
             </Badge>
           </div>
-          {requirement.hasRequirement ?<p className="text-sm text-muted-foreground">{formatRequirementRule(requirement)}</p>:<div className="text-accent-foreground">No requirment</div>}
+          {requirement.hasRequirement ? (
+            <p className="text-sm text-muted-foreground">{formatRequirementRule(requirement)}</p>
+          ) : (
+            <div className="text-accent-foreground">{t("noRequirementValue")}</div>
+          )}
         </div>
 
         {!readOnly && (
@@ -137,18 +143,18 @@ function RequirementRow({
               <AlertDialogTrigger asChild>
                 <Button variant="ghost" size="icon" className="text-destructive hover:text-destructive">
                   <Trash2 className="size-4" />
-                  <span className="sr-only">Remove requirement</span>
+                  <span className="sr-only">{t("removeRequirementSr")}</span>
                 </Button>
               </AlertDialogTrigger>
               <AlertDialogContent>
                 <AlertDialogHeader>
-                  <AlertDialogTitle>Remove this requirement?</AlertDialogTitle>
+                  <AlertDialogTitle>{t("removeRequirementTitle")}</AlertDialogTitle>
                   <AlertDialogDescription>
-                    Candidates will no longer be asked for &ldquo;{requirement.attributeTitle}&rdquo;.
+                    {t("removeRequirementDescription", { title: requirement.attributeTitle })}
                   </AlertDialogDescription>
                 </AlertDialogHeader>
                 <AlertDialogFooter>
-                  <AlertDialogCancel disabled={isDeleting}>Cancel</AlertDialogCancel>
+                  <AlertDialogCancel disabled={isDeleting}>{t("cancel")}</AlertDialogCancel>
                   <AlertDialogAction
                     onClick={(e) => {
                       e.preventDefault();
@@ -157,7 +163,7 @@ function RequirementRow({
                     disabled={isDeleting}
                     className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
                   >
-                    Remove
+                    {t("remove")}
                   </AlertDialogAction>
                 </AlertDialogFooter>
               </AlertDialogContent>

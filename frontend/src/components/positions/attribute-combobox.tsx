@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { Check, ChevronsUpDown } from "lucide-react";
+import { useTranslations } from "next-intl";
 
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
@@ -26,8 +27,8 @@ export function AttributeCombobox({
   value,
   onChange,
   isLoading,
-  placeholder = "Choose an attribute",
-  emptyText = "No more filterable attributes available.",
+  placeholder,
+  emptyText,
 }: {
   attributes: AttributeSummaryDto[];
   value: string;
@@ -36,8 +37,11 @@ export function AttributeCombobox({
   placeholder?: string;
   emptyText?: string;
 }) {
+  const t = useTranslations("positions");
   const [open, setOpen] = useState(false);
   const selected = attributes.find((a) => a.id === value) ?? null;
+  const resolvedPlaceholder = placeholder ?? t("choosePlaceholder");
+  const resolvedEmptyText = emptyText ?? t("noMoreAttributes");
 
   return (
     <Popover open={open} onOpenChange={setOpen}>
@@ -51,16 +55,16 @@ export function AttributeCombobox({
           className="w-full justify-between font-normal"
         >
           <span className={cn("truncate", !selected && "text-muted-foreground")}>
-            {isLoading ? "Loading..." : selected ? selected.title : placeholder}
+            {isLoading ? t("loading") : selected ? selected.title : resolvedPlaceholder}
           </span>
           <ChevronsUpDown className="size-4 shrink-0 opacity-50" />
         </Button>
       </PopoverTrigger>
       <PopoverContent className="w-[--radix-popover-trigger-width] p-0" align="start">
         <Command>
-          <CommandInput placeholder="Search attributes..." />
+          <CommandInput placeholder={t("searchAttributesPlaceholder")} />
           <CommandList>
-            <CommandEmpty>{emptyText}</CommandEmpty>
+            <CommandEmpty>{resolvedEmptyText}</CommandEmpty>
             <CommandGroup>
               {attributes.map((a) => (
                 <CommandItem

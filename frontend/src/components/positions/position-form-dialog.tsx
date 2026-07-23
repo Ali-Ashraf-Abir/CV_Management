@@ -5,6 +5,7 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { toast } from "sonner";
 import { Loader2 } from "lucide-react";
+import { useTranslations } from "next-intl";
 
 import { Button } from "@/components/ui/button";
 import {
@@ -40,6 +41,7 @@ interface PositionFormDialogProps {
 }
 
 export function PositionFormDialog({ position, onSaved, trigger }: PositionFormDialogProps) {
+  const t = useTranslations("positions");
   const [open, setOpen] = useState(false);
   const isEditing = Boolean(position);
 
@@ -78,26 +80,24 @@ export function PositionFormDialog({ position, onSaved, trigger }: PositionFormD
             deadline,
           });
 
-      toast.success(isEditing ? "Position updated" : "Position created");
+      toast.success(isEditing ? t("positionUpdated") : t("positionCreated"));
       setOpen(false);
       onSaved(saved);
     } catch (err) {
-      toast.error(extractErrorMessage(err, "Couldn't save the position"));
+      toast.error(extractErrorMessage(err, t("positionSaveError")));
     }
   }
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
-        {trigger ?? <Button>{isEditing ? "Edit position" : "New position"}</Button>}
+        {trigger ?? <Button>{isEditing ? t("editPositionTitle") : t("newPositionTitle")}</Button>}
       </DialogTrigger>
       <DialogContent className="sm:max-w-lg">
         <DialogHeader>
-          <DialogTitle>{isEditing ? "Edit position" : "Create a position"}</DialogTitle>
+          <DialogTitle>{isEditing ? t("editPositionTitle") : t("createPositionTitle")}</DialogTitle>
           <DialogDescription>
-            {isEditing
-              ? "Update the role details. Requirements are managed separately."
-              : "Start as a draft — you can add requirements and publish when it's ready."}
+            {isEditing ? t("editPositionDescription") : t("createPositionDescription")}
           </DialogDescription>
         </DialogHeader>
 
@@ -108,9 +108,9 @@ export function PositionFormDialog({ position, onSaved, trigger }: PositionFormD
               name="title"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Title</FormLabel>
+                  <FormLabel>{t("fieldTitleLabel")}</FormLabel>
                   <FormControl>
-                    <Input placeholder="Senior Backend Engineer" {...field} />
+                    <Input placeholder={t("fieldTitlePlaceholder")} {...field} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -122,10 +122,10 @@ export function PositionFormDialog({ position, onSaved, trigger }: PositionFormD
               name="description"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Description</FormLabel>
+                  <FormLabel>{t("fieldDescriptionLabel")}</FormLabel>
                   <FormControl>
                     <Textarea
-                      placeholder="What the role involves, team, expectations..."
+                      placeholder={t("fieldDescriptionPlaceholder")}
                       className="min-h-32 resize-y"
                       {...field}
                     />
@@ -140,7 +140,7 @@ export function PositionFormDialog({ position, onSaved, trigger }: PositionFormD
               name="deadline"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Application deadline</FormLabel>
+                  <FormLabel>{t("fieldDeadlineLabel")}</FormLabel>
                   <FormControl>
                     <Input type="date" {...field} value={field.value ?? ""} />
                   </FormControl>
@@ -156,11 +156,11 @@ export function PositionFormDialog({ position, onSaved, trigger }: PositionFormD
                 onClick={() => setOpen(false)}
                 disabled={form.formState.isSubmitting}
               >
-                Cancel
+                {t("cancel")}
               </Button>
               <Button type="submit" disabled={form.formState.isSubmitting}>
                 {form.formState.isSubmitting && <Loader2 className="size-4 animate-spin" />}
-                {isEditing ? "Save changes" : "Create position"}
+                {isEditing ? t("saveChanges") : t("createPositionButton")}
               </Button>
             </DialogFooter>
           </form>

@@ -1,6 +1,7 @@
 "use client";
 
 import { Control } from "react-hook-form";
+import { useTranslations } from "next-intl";
 
 import { FormControl, FormField, FormItem, FormLabel, FormMessage } from "../ui/form";
 import { Input } from "@/components/ui/input";
@@ -36,6 +37,8 @@ function ValueControl({
   placeholder: string;
   attributeDetails: AttributeDto | null;
 }) {
+  const t = useTranslations("positions");
+
   switch (attribute.type) {
     case "Numeric":
       return (
@@ -58,15 +61,15 @@ function ValueControl({
           onValueChange={(v) => v && onChange(v)}
           className="justify-start"
         >
-          <ToggleGroupItem value="true">True</ToggleGroupItem>
-          <ToggleGroupItem value="false">False</ToggleGroupItem>
+          <ToggleGroupItem value="true">{t("trueLabel")}</ToggleGroupItem>
+          <ToggleGroupItem value="false">{t("falseLabel")}</ToggleGroupItem>
         </ToggleGroup>
       );
     case "Dropdown":
       return (
         <Select value={value} onValueChange={onChange}>
           <SelectTrigger>
-            <SelectValue placeholder="Choose an option" />
+            <SelectValue placeholder={t("chooseOptionPlaceholder")} />
           </SelectTrigger>
           <SelectContent>
             {attributeDetails?.values?.map((v) => (
@@ -85,9 +88,10 @@ function ValueControl({
 }
 
 export function RequirementValueFields({ control, attribute, operator, attributeDetails }: RequirementValueFieldsProps) {
+  const t = useTranslations("positions");
   const isBetween = operator === "Between";
   const isMultiDropdown = operator === "In" && attribute.type === "Dropdown";
-  console.log(attributeDetails)
+
   return (
     <div className="space-y-4">
       <FormField
@@ -95,7 +99,7 @@ export function RequirementValueFields({ control, attribute, operator, attribute
         name="value"
         render={({ field }) => (
           <FormItem>
-            <FormLabel>{isBetween ? "From" : "Value"}</FormLabel>
+            <FormLabel>{isBetween ? t("fromLabel") : t("valueLabel")}</FormLabel>
             <FormControl>
               {isMultiDropdown ? (
                 <DropdownMultiSelect
@@ -107,7 +111,7 @@ export function RequirementValueFields({ control, attribute, operator, attribute
                 <Input
                   value={field.value}
                   onChange={field.onChange}
-                  placeholder="Comma-separated, e.g. React, Vue, Angular"
+                  placeholder={t("inValuesPlaceholder")}
                 />
               ) : (
                 <ValueControl
@@ -115,7 +119,7 @@ export function RequirementValueFields({ control, attribute, operator, attribute
                   attributeDetails={attributeDetails}
                   value={field.value}
                   onChange={field.onChange}
-                  placeholder="Enter a value"
+                  placeholder={t("enterValuePlaceholder")}
                 />
               )}
             </FormControl>
@@ -130,14 +134,14 @@ export function RequirementValueFields({ control, attribute, operator, attribute
           name="secondValue"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>To</FormLabel>
+              <FormLabel>{t("toLabel")}</FormLabel>
               <FormControl>
                 <ValueControl
                   attributeDetails={attributeDetails}
                   attribute={attribute}
                   value={field.value ?? ""}
                   onChange={field.onChange}
-                  placeholder="Enter a value"
+                  placeholder={t("enterValuePlaceholder")}
                 />
               </FormControl>
               <FormMessage />

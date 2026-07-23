@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 import { ArrowLeft, CalendarClock } from "lucide-react";
 import Link from "next/link";
+import { useFormatter, useTranslations } from "next-intl";
 
 import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
@@ -23,6 +24,8 @@ import { PositionDto, PositionRequirementDto } from "@/types/position";
 import { positionRequirementsApi } from "@/lib/api/positionRequirement";
 
 export function RecruiterPositionDetail({ positionId }: { positionId: string }) {
+  const t = useTranslations("positions");
+  const format = useFormatter();
   const router = useRouter();
   const [position, setPosition] = useState<PositionDto | null>(null);
   const [requirements, setRequirements] = useState<PositionRequirementDto[] | null>(null);
@@ -36,7 +39,7 @@ export function RecruiterPositionDetail({ positionId }: { positionId: string }) 
       setPosition(positionData);
       setRequirements(requirementsData);
     } catch (err) {
-      toast.error(extractErrorMessage(err, "Couldn't load the position"));
+      toast.error(extractErrorMessage(err, t("loadPositionError")));
     }
   }
 
@@ -57,11 +60,11 @@ export function RecruiterPositionDetail({ positionId }: { positionId: string }) 
   return (
     <div className="mx-auto max-w-3xl px-4 py-8 sm:px-6">
       <Link
-        href="/positions"
+        href="/my-positions"
         className="mb-4 inline-flex items-center gap-1 text-sm text-muted-foreground hover:text-foreground"
       >
         <ArrowLeft className="size-4" />
-        Back to positions
+        {t("backToPositions")}
       </Link>
 
       <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
@@ -71,14 +74,17 @@ export function RecruiterPositionDetail({ positionId }: { positionId: string }) 
             <PositionStatusBadge status={position.status} />
           </div>
           <p className="mt-1 text-sm text-muted-foreground">
-            Created by {position.createdByName || "—"}
+            {t("createdBy", { name: position.createdByName || "—" })}
           </p>
           {position.deadline && (
             <p className="mt-1 flex items-center gap-1 text-sm text-muted-foreground">
               <CalendarClock className="size-3.5" />
-              Deadline {new Date(position.deadline).toLocaleDateString()}
+              {t("deadlineDetail", {
+                date: format.dateTime(new Date(position.deadline), { dateStyle: "medium" }),
+              })}
             </p>
           )}
+         
         </div>
 
         <div className="flex shrink-0 items-center gap-2">
@@ -86,7 +92,7 @@ export function RecruiterPositionDetail({ positionId }: { positionId: string }) 
           <PositionFormDialog
             position={position}
             onSaved={setPosition}
-            trigger={<Button variant="outline">Edit</Button>}
+            trigger={<Button variant="outline">{t("editButton")}</Button>}
           />
           <DeletePositionDialog
             positionId={position.id}

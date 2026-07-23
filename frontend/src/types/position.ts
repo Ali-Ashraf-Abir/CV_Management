@@ -128,6 +128,7 @@ export interface PositionDto {
   version: number;
   requirementsCount: number;
   requirements: PositionRequirementDto[];
+  applicationsCount:number;
 }
 
 export interface PositionSummaryDto {
@@ -136,6 +137,7 @@ export interface PositionSummaryDto {
   status: PositionStatus;
   isPublished: boolean;
   deadline: string | null;
+  applicationsCount:number;
   createdAt: string;
   version: number;
   requirementsCount: number;

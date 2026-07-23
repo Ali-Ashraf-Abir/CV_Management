@@ -4,6 +4,7 @@ import { useEffect, useMemo, useState } from "react";
 import Link from "next/link";
 import { toast } from "sonner";
 import { ClipboardList, ListFilter, Users2 } from "lucide-react";
+import { useFormatter, useTranslations } from "next-intl";
 
 import {
   Select,
@@ -20,6 +21,7 @@ import { DeletePositionDialog } from "./delete-position-dialog";
 import { positionsApi } from "@/lib/api/position";
 import { extractErrorMessage } from "@/lib/api";
 import { PositionStatus, PositionSummaryDto } from "@/types/position";
+import { Button } from "../ui/button";
 
 const STATUS_FILTERS: Array<PositionStatus | "All"> = [
   "All",
@@ -30,6 +32,8 @@ const STATUS_FILTERS: Array<PositionStatus | "All"> = [
 ];
 
 export function RecruiterPositionsPage({ type }: { type: string }) {
+  const t = useTranslations("positions");
+  const format = useFormatter();
   const [positions, setPositions] = useState<PositionSummaryDto[] | null>(null);
   const [statusFilter, setStatusFilter] = useState<PositionStatus | "All">("All");
 
@@ -39,18 +43,18 @@ export function RecruiterPositionsPage({ type }: { type: string }) {
         const data = await positionsApi.myList(statusFilter === "All" ? undefined : statusFilter);
         setPositions(data);
       } catch (err) {
-        toast.error(extractErrorMessage(err, "Couldn't load positions"));
+        toast.error(extractErrorMessage(err, t("loadPositionsError")));
         setPositions([]);
       }
     }
-    else if (type=='all'){
+    else if (type == 'all') {
       try {
-      const data = await positionsApi.list(statusFilter === "All" ? undefined : statusFilter);
-      setPositions(data);
-    } catch (err) {
-      toast.error(extractErrorMessage(err, "Couldn't load positions"));
-      setPositions([]);
-    }
+        const data = await positionsApi.list(statusFilter === "All" ? undefined : statusFilter);
+        setPositions(data);
+      } catch (err) {
+        toast.error(extractErrorMessage(err, t("loadPositionsError")));
+        setPositions([]);
+      }
     }
   }
 
@@ -64,10 +68,8 @@ export function RecruiterPositionsPage({ type }: { type: string }) {
     <div className="mx-auto max-w-5xl px-4 py-8 sm:px-6">
       <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
         <div>
-          <h1 className="text-2xl font-semibold tracking-tight">Positions</h1>
-          <p className="text-sm text-muted-foreground">
-            Create roles, define requirements, and manage their lifecycle.
-          </p>
+          <h1 className="text-2xl font-semibold tracking-tight">{t("pageTitle")}</h1>
+          <p className="text-sm text-muted-foreground">{t("pageDescription")}</p>
         </div>
         <div className="flex items-center gap-2">
           <Select value={statusFilter} onValueChange={(v) => setStatusFilter(v as typeof statusFilter)}>
@@ -78,7 +80,7 @@ export function RecruiterPositionsPage({ type }: { type: string }) {
             <SelectContent>
               {STATUS_FILTERS.map((s) => (
                 <SelectItem key={s} value={s}>
-                  {s}
+                  {t(`status.${s}`)}
                 </SelectItem>
               ))}
             </SelectContent>
@@ -99,10 +101,8 @@ export function RecruiterPositionsPage({ type }: { type: string }) {
           <Card className="border-dashed">
             <CardContent className="flex flex-col items-center gap-2 py-12 text-center">
               <ClipboardList className="size-8 text-muted-foreground" />
-              <p className="font-medium">No positions yet</p>
-              <p className="text-sm text-muted-foreground">
-                Create your first position to start defining requirements.
-              </p>
+              <p className="font-medium">{t("noPositionsTitle")}</p>
+              <p className="text-sm text-muted-foreground">{t("noPositionsDescription")}</p>
             </CardContent>
           </Card>
         )}
@@ -118,15 +118,25 @@ export function RecruiterPositionsPage({ type }: { type: string }) {
                 <div className="mt-1 flex items-center gap-4 text-sm text-muted-foreground">
                   <span className="flex items-center gap-1">
                     <Users2 className="size-3.5" />
-                    {position.requirementsCount} requirement
-                    {position.requirementsCount === 1 ? "" : "s"}
+                    {t("requirementCount", { count: position.requirementsCount })}
                   </span>
                   {position.deadline && (
                     <span>
-                      Deadline {new Date(position.deadline).toLocaleDateString()}
+                      {t("deadlineLabel", {
+                        date: format.dateTime(new Date(position.deadline), {
+                          dateStyle: "medium",
+                        }),
+                      })}
                     </span>
                   )}
                 </div>
+                <p className="mt-1 flex items-center gap-1 text-sm text-muted-foreground">
+                  {t("applicationsCount", { count: position.applicationsCount })}
+                </p>
+                
+              </Link>
+              <Link href={`/positions/${position.id}/applicants`}>
+                <Button className="bg-accent-foreground text-accent">{t("viewApplicants")}</Button>
               </Link>
               <DeletePositionDialog
                 positionId={position.id}
